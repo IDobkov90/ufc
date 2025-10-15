@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <a th:href="@{/}" class="logo">
+                <div class="logo-icon">UFC</div>
+                <h1>UFC България</h1>
+            </a>
+            <div class="auth-buttons">
+                <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav>
+    <div class="container">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a th:href="@{/}">Начало</a></li>
+                <li><a href="#" title="Форум (Скоро)">Форум</a></li>
+                <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
+                <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="form-container">
+        <h2>Вход в системата</h2>
+        <p>Добре дошли отново! Влезте, за да продължите.</p>
+
+        <!-- Display error message if login fails -->
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            ⚠️ Невалидно потребителско име или парола.
+        </div>
+
+        <!-- Display message on successful logout -->
+        <div th:if="${param.logout}" class="alert alert-success" role="alert">
+            ✅ Вие излязохте успешно.
+        </div>
+
+        <form th:action="@{/login}" method="post" class="form-styled">
+            <div class="form-group">
+                <label for="username">Потребителско име</label>
+                <input type="text" id="username" name="username" required autofocus aria-required="true" />
+            </div>
+            <div class="form-group">
+                <label for="password">Парола</label>
+                <input type="password" id="password" name="password" required aria-required="true" />
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Вход</button>
+            <p style="text-align: center; margin-top: 1rem; color: #cccccc;">
+                Нямате акаунт? <a th:href="@{/user/register}" style="color: #d4af37;">Регистрирайте се тук</a>
+            </p>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>За нас</h5>
+                <p>UFC България е независим форум, създаден от фенове за фенове на UFC и MMA спорта в България.</p>
+            </div>
+            <div class="footer-section">
+                <h5>Полезни връзки</h5>
+                <a href="#" title="Правила на форума">Правила на форума</a>
+                <a href="#" title="Често задавани въпроси">Често задавани въпроси</a>
+                <a href="#" title="Контакти">Контакти</a>
+            </div>
+            <div class="footer-section">
+                <h5>Последвайте ни</h5>
+                <a href="#" title="Facebook страница" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="#" title="Instagram профил" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="#" title="YouTube канал" target="_blank" rel="noopener noreferrer">YouTube</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 UFC България Форум. Всички права запазени. Този сайт не е свързан официално с UFC.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

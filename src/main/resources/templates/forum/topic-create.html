@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Създай нова тема - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/forum}" class="active">Форум</a></li>
+                    <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                    <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                    <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
+                    <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="form-container">
+            <h2>Създай нова тема</h2>
+
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                ❌ <span th:text="${errorMessage}">Error!</span>
+            </div>
+
+            <form th:action="@{/forum/topic/new}" th:object="${topicCreateDto}" method="post" class="topic-form">
+                <div class="form-group">
+                    <label for="title">Заглавие *</label>
+                    <input type="text"
+                           id="title"
+                           th:field="*{title}"
+                           class="form-control"
+                           placeholder="Въведете заглавие на темата"
+                           required>
+                    <span class="error-message" th:if="${#fields.hasErrors('title')}" th:errors="*{title}">Title error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Категория *</label>
+                    <select id="category"
+                            th:field="*{category}"
+                            class="form-control"
+                            required>
+                        <option value="">Изберете категория</option>
+                        <option th:each="cat : ${categories}"
+                                th:value="${cat}"
+                                th:text="${cat.displayName}">Category</option>
+                    </select>
+                    <span class="error-message" th:if="${#fields.hasErrors('category')}" th:errors="*{category}">Category error</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="content">Съдържание *</label>
+                    <textarea id="content"
+                              th:field="*{content}"
+                              class="form-control"
+                              rows="10"
+                              placeholder="Въведете съдържанието на темата"
+                              required></textarea>
+                    <span class="error-message" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content error</span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">Създай тема</button>
+                    <a th:href="@{/forum}" class="btn btn-secondary">Отказ</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 UFC България. Всички права запазени.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

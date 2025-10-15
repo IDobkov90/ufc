@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Форум - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                        <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/forum}" class="active">Форум</a></li>
+                    <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                    <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                    <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
+                    <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            ✅ <span th:text="${successMessage}">Success!</span>
+        </div>
+
+        <div th:if="${param.error}" class="alert alert-danger" role="alert">
+            ❌ Темата не беше намерена.
+        </div>
+
+        <div class="forum-header">
+            <h2>Форум</h2>
+            <div class="forum-actions">
+                <a th:href="@{/forum/topic/new}" class="btn btn-primary" sec:authorize="isAuthenticated()">
+                    ➕ Създай нова тема
+                </a>
+                <div sec:authorize="!isAuthenticated()">
+                    <p class="login-prompt">
+                        <a th:href="@{/login}">Влезте</a> за да създавате теми
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="forum-stats">
+            <div class="stat-item">
+                <span class="stat-value" th:text="${totalTopics}">0</span>
+                <span class="stat-label">Теми</span>
+            </div>
+        </div>
+
+        <!-- Category filters -->
+        <div class="category-filters">
+            <a th:href="@{/forum}" class="category-filter-btn active">Всички</a>
+            <a th:each="cat : ${categories}"
+               th:href="@{/forum/category/{category}(category=${cat})}"
+               th:text="${cat.displayName}"
+               class="category-filter-btn">Category</a>
+        </div>
+
+        <!-- Topics list -->
+        <div class="topics-list" th:if="${topics != null and !topics.isEmpty()}">
+            <div th:each="topic : ${topics.content}" class="topic-item">
+                <div class="topic-info">
+                    <div class="topic-badges">
+                        <span th:if="${topic.isPinned}" class="badge badge-pinned" title="Закачена тема">📌</span>
+                        <span th:if="${topic.isLocked}" class="badge badge-locked" title="Заключена тема">🔒</span>
+                    </div>
+                    <h3 class="topic-title">
+                        <a th:href="@{/forum/topic/{id}(id=${topic.id})}" th:text="${topic.title}">Topic Title</a>
+                    </h3>
+                    <div class="topic-meta">
+                        <span class="topic-category" th:text="${topic.category.displayName}">Category</span>
+                        <span class="topic-author">от <strong th:text="${topic.authorUsername}">Author</strong></span>
+                        <span class="topic-date" th:text="${#temporals.format(topic.createdAt, 'dd.MM.yyyy HH:mm')}">Date</span>
+                    </div>
+                </div>
+                <div class="topic-stats">
+                    <div class="stat">
+                        <span class="stat-icon">👁️</span>
+                        <span th:text="${topic.viewCount}">0</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-icon">💬</span>
+                        <span th:text="${topic.replyCount}">0</span>
+                    </div>
+                </div>
+                <div class="topic-last-post" th:if="${topic.lastPostUsername != null}">
+                    <div class="last-post-info">
+                        <span class="last-post-label">Последен:</span>
+                        <span class="last-post-user" th:text="${topic.lastPostUsername}">User</span>
+                        <span class="last-post-date" th:text="${#temporals.format(topic.lastPostAt, 'dd.MM.yyyy HH:mm')}">Date</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${topics == null or topics.isEmpty()}" class="no-topics">
+            <p>📭 Все още няма създадени теми в този форум.</p>
+            <a th:href="@{/forum/topic/new}" class="btn btn-primary" sec:authorize="isAuthenticated()">
+                Бъдете първият, който създава тема!
+            </a>
+        </div>
+
+        <!-- Pagination -->
+        <div th:if="${topics != null and topics.totalPages > 1}" class="pagination">
+            <a th:if="${topics.hasPrevious()}"
+               th:href="@{/forum(page=${topics.number - 1})}"
+               class="btn btn-secondary">← Предишна</a>
+
+            <span class="page-info">
+                Страница <strong th:text="${topics.number + 1}">1</strong> от <strong th:text="${topics.totalPages}">1</strong>
+            </span>
+
+            <a th:if="${topics.hasNext()}"
+               th:href="@{/forum(page=${topics.number + 1})}"
+               class="btn btn-secondary">Следваща →</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 UFC България. Всички права запазени.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

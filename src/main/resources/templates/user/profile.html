@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${profile.username} + ' - Профил - UFC България'">Профил - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                        <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/forum}">Форум</a></li>
+                    <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                    <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                    <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
+                    <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            ✅ <span th:text="${successMessage}">Success!</span>
+        </div>
+
+        <div class="profile-container">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar-section">
+                    <div class="profile-avatar-large">
+                        <span th:text="${#strings.substring(profile.username, 0, 1).toUpperCase()}">U</span>
+                    </div>
+                    <div class="profile-info">
+                        <h2 th:text="${profile.username}">Username</h2>
+                        <div class="profile-role" th:text="${profile.role}">USER</div>
+                        <div class="profile-joined">
+                            Член от: <span th:text="${#temporals.format(profile.createdAt, 'dd.MM.yyyy')}">Date</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-actions" th:if="${isOwnProfile}">
+                    <a th:href="@{/user/profile/edit}" class="btn btn-secondary">✏️ Редактирай профил</a>
+                </div>
+            </div>
+
+            <!-- Profile Stats -->
+            <div class="profile-stats">
+                <div class="stat-box">
+                    <div class="stat-number" th:text="${profile.topicCount}">0</div>
+                    <div class="stat-label">Теми</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" th:text="${profile.postCount}">0</div>
+                    <div class="stat-label">Коментари</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-number" th:text="${profile.reputation}">0</div>
+                    <div class="stat-label">Репутация</div>
+                </div>
+            </div>
+
+            <!-- Bio Section -->
+            <div class="profile-bio" th:if="${profile.bio != null and !#strings.isEmpty(profile.bio)}">
+                <h3>За мен</h3>
+                <p th:text="${profile.bio}">User bio</p>
+            </div>
+
+            <!-- Activity Tabs -->
+            <div class="profile-tabs">
+                <div class="tab-buttons">
+                    <a th:href="@{/user/profile/{username}(username=${profile.username}, tab='topics')}"
+                       th:class="${activeTab == 'topics' ? 'tab-btn active' : 'tab-btn'}">
+                        📝 Теми
+                    </a>
+                    <a th:href="@{/user/profile/{username}(username=${profile.username}, tab='posts')}"
+                       th:class="${activeTab == 'posts' ? 'tab-btn active' : 'tab-btn'}">
+                        💬 Коментари
+                    </a>
+                </div>
+
+                <!-- Topics Tab -->
+                <div class="tab-content" th:if="${activeTab == 'topics'}">
+                    <h3>Последни теми</h3>
+                    <div th:if="${topics != null and !topics.isEmpty()}" class="profile-topics-list">
+                        <div th:each="topic : ${topics}" class="profile-topic-item">
+                            <div class="topic-info">
+                                <h4 class="topic-title">
+                                    <a th:href="@{/forum/topic/{id}(id=${topic.id})}" th:text="${topic.title}">Topic Title</a>
+                                </h4>
+                                <div class="topic-meta">
+                                    <span class="topic-category" th:text="${topic.category.displayName}">Category</span>
+                                    <span class="topic-date" th:text="${#temporals.format(topic.createdAt, 'dd.MM.yyyy HH:mm')}">Date</span>
+                                </div>
+                            </div>
+                            <div class="topic-stats-small">
+                                <span>👁️ <strong th:text="${topic.viewCount}">0</strong></span>
+                                <span>💬 <strong th:text="${topic.replyCount}">0</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${topics == null or topics.isEmpty()}" class="no-content">
+                        <p>Все още няма създадени теми.</p>
+                    </div>
+                </div>
+
+                <!-- Posts Tab -->
+                <div class="tab-content" th:if="${activeTab == 'posts'}">
+                    <h3>Последни коментари</h3>
+                    <div th:if="${posts != null and !posts.isEmpty()}" class="profile-posts-list">
+                        <div th:each="post : ${posts}" class="profile-post-item">
+                            <div class="post-preview">
+                                <p th:text="${#strings.abbreviate(post.content, 150)}">Post content preview...</p>
+                            </div>
+                            <div class="post-info">
+                                <span>В тема: <a th:href="@{/forum/topic/{id}(id=${post.topic.id})}" th:text="${post.topic.title}">Topic</a></span>
+                                <span class="post-date" th:text="${#temporals.format(post.createdAt, 'dd.MM.yyyy HH:mm')}">Date</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div th:if="${posts == null or posts.isEmpty()}" class="no-content">
+                        <p>Все още няма написани коментари.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="back-action">
+            <a th:href="@{/forum}" class="btn btn-secondary">← Назад към форума</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 UFC България. Всички права запазени.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

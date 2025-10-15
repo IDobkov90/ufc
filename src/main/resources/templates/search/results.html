@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Търсене - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                        <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <a th:href="@{/user/profile/{username}(username=${#authentication.name})}" class="btn btn-secondary">👤 Профил</a>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/forum}">Форум</a></li>
+                    <li><a th:href="@{/search}" class="active">Търсене</a></li>
+                    <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                    <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="search-page">
+            <h1>🔍 Търсене</h1>
+
+            <!-- Search Form -->
+            <div class="search-form-container">
+                <form th:action="@{/search}" method="get" class="search-form-large">
+                    <div class="search-input-wrapper">
+                        <input type="text"
+                               name="q"
+                               th:value="${query}"
+                               placeholder="Търси теми, коментари, потребители..."
+                               class="search-input-large"
+                               autofocus>
+                        <button type="submit" class="btn btn-primary search-btn">🔍 Търси</button>
+                    </div>
+
+                    <div class="search-filters">
+                        <label class="filter-label">Филтри:</label>
+                        <label class="radio-label">
+                            <input type="radio" name="type" value="all" th:checked="${type == 'all' or type == null}">
+                            <span>Всички</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="type" value="topics" th:checked="${type == 'topics'}">
+                            <span>Теми</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="type" value="posts" th:checked="${type == 'posts'}">
+                            <span>Коментари</span>
+                        </label>
+                        <label class="radio-label">
+                            <input type="radio" name="type" value="users" th:checked="${type == 'users'}">
+                            <span>Потребители</span>
+                        </label>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Empty State -->
+            <div th:if="${showEmptyState}" class="empty-state">
+                <div class="empty-icon">🔍</div>
+                <h2>Започнете търсене</h2>
+                <p>Въведете дума или фраза за търсене на теми, коментари или потребители.</p>
+            </div>
+
+            <!-- Search Results -->
+            <div th:if="${!showEmptyState and results != null}">
+                <!-- Results Summary -->
+                <div class="search-summary">
+                    <p>
+                        Намерени <strong th:text="${results.totalResults}">0</strong> резултата за
+                        "<strong th:text="${query}">query</strong>"
+                    </p>
+                </div>
+
+                <!-- No Results -->
+                <div th:if="${results.totalResults == 0}" class="no-results">
+                    <div class="empty-icon">😔</div>
+                    <h2>Няма намерени резултати</h2>
+                    <p>Опитайте с други ключови думи или променете филтрите.</p>
+                </div>
+
+                <!-- Topics Results -->
+                <div th:if="${!results.topics.isEmpty()}" class="search-section">
+                    <h2 class="section-title">📝 Теми (<span th:text="${results.topics.size()}">0</span>)</h2>
+                    <div class="search-results-list">
+                        <div th:each="topic : ${results.topics}" class="search-result-item topic-result">
+                            <div class="result-header">
+                                <h3 class="result-title">
+                                    <a th:href="@{/forum/topic/{id}(id=${topic.id})}" th:text="${topic.title}">Topic Title</a>
+                                </h3>
+                                <span class="result-category" th:text="${topic.categoryName}">Category</span>
+                            </div>
+                            <p class="result-excerpt" th:text="${topic.excerpt}">Topic excerpt...</p>
+                            <div class="result-meta">
+                                <span class="result-author">
+                                    👤 <a th:href="@{/user/profile/{username}(username=${topic.authorUsername})}"
+                                         th:text="${topic.authorUsername}">Author</a>
+                                </span>
+                                <span class="result-date" th:text="${#temporals.format(topic.createdAt, 'dd.MM.yyyy HH:mm')}">Date</span>
+                                <span class="result-stat">👁️ <strong th:text="${topic.viewCount}">0</strong></span>
+                                <span class="result-stat">💬 <strong th:text="${topic.replyCount}">0</strong></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Posts Results -->
+                <div th:if="${!results.posts.isEmpty()}" class="search-section">
+                    <h2 class="section-title">💬 Коментари (<span th:text="${results.posts.size()}">0</span>)</h2>
+                    <div class="search-results-list">
+                        <div th:each="post : ${results.posts}" class="search-result-item post-result">
+                            <div class="result-header">
+                                <h4 class="result-subtitle">
+                                    В тема: <a th:href="@{/forum/topic/{id}(id=${post.topicId})}"
+                                              th:text="${post.topicTitle}">Topic</a>
+                                </h4>
+                            </div>
+                            <p class="result-excerpt" th:text="${post.excerpt}">Post excerpt...</p>
+                            <div class="result-meta">
+                                <span class="result-author">
+                                    👤 <a th:href="@{/user/profile/{username}(username=${post.authorUsername})}"
+                                         th:text="${post.authorUsername}">Author</a>
+                                </span>
+                                <span class="result-date" th:text="${#temporals.format(post.createdAt, 'dd.MM.yyyy HH:mm')}">Date</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Users Results -->
+                <div th:if="${!results.users.isEmpty()}" class="search-section">
+                    <h2 class="section-title">👥 Потребители (<span th:text="${results.users.size()}">0</span>)</h2>
+                    <div class="search-results-list">
+                        <div th:each="user : ${results.users}" class="search-result-item user-result">
+                            <div class="user-result-content">
+                                <div class="user-result-avatar">
+                                    <span th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}">U</span>
+                                </div>
+                                <div class="user-result-info">
+                                    <h3 class="result-title">
+                                        <a th:href="@{/user/profile/{username}(username=${user.username})}"
+                                           th:text="${user.username}">Username</a>
+                                    </h3>
+                                    <div class="user-result-role" th:text="${user.role}">ROLE</div>
+                                    <p th:if="${user.bio != null and !user.bio.isEmpty()}"
+                                       class="result-excerpt"
+                                       th:text="${user.bio}">User bio</p>
+                                    <div class="result-meta">
+                                        <span>📝 <strong th:text="${user.topicCount}">0</strong> теми</span>
+                                        <span>💬 <strong th:text="${user.postCount}">0</strong> коментара</span>
+                                        <span class="result-date">
+                                            Член от: <span th:text="${#temporals.format(user.createdAt, 'dd.MM.yyyy')}">Date</span>
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="back-action">
+                <a th:href="@{/forum}" class="btn btn-secondary">← Назад към форума</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 UFC България. Всички права запазени.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

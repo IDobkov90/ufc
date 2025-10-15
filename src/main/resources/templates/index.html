@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UFC България - Официален Форум</title>
+    <meta name="description" content="Най-големият български форум за UFC, MMA и бойни спортове. Дискусии, новини, анализи и прогнози.">
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <!-- Show these buttons only when user is NOT authenticated -->
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                        <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+                    </div>
+
+                    <!-- Show this when user IS authenticated -->
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}" class="active">Начало</a></li>
+                    <li><a th:href="@{/forum}">Форум</a></li>
+                    <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                    <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                    <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
+                    <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Success message after login -->
+        <div th:if="${param.login}" class="alert alert-success" role="alert">
+            ✅ Успешно влязохте в системата! Добре дошли!
+        </div>
+
+        <!-- Success message after registration -->
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            ✅ <span th:text="${successMessage}">Success!</span>
+        </div>
+
+        <section class="hero" sec:authorize="!isAuthenticated()">
+            <div class="container">
+                <h2>Добре дошли в UFC България</h2>
+                <p>Най-големият български форум за UFC, MMA и бойни спортове. Присъединете се към общността и споделете страстта си към октагона!</p>
+                <a th:href="@{/user/register}" class="btn btn-primary">Присъединете се сега</a>
+            </div>
+        </section>
+
+        <section class="hero" sec:authorize="isAuthenticated()">
+            <div class="container">
+                <h2>Добре дошли обратно, <span sec:authentication="name">User</span>!</h2>
+                <p>Готови ли сте да обсъдите последните боеве и да споделите вашите прогнози?</p>
+            </div>
+        </section>
+
+        <div class="content-grid">
+            <section class="forum-categories">
+                <h3>Категории на форума</h3>
+                <div class="category-list">
+                    <a th:href="@{/forum/category/GENERAL_UFC}" class="category-item" tabindex="0" role="button" aria-label="Общи дискусии за UFC">
+                        <div class="category-title">🥊 Общи дискусии за UFC</div>
+                        <div class="category-desc">Обсъждайте всичко свързано с UFC - боеве, бойци, новини и развитие на спорта</div>
+                    </a>
+                    <a th:href="@{/forum/category/UPCOMING_EVENTS}" class="category-item" tabindex="0" role="button" aria-label="Предстоящи събития">
+                        <div class="category-title">📅 Предстоящи събития</div>
+                        <div class="category-desc">Информация и дискусии за предстоящи UFC събития и боеве</div>
+                    </a>
+                    <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="category-item" tabindex="0" role="button" aria-label="Анализи и прогнози">
+                        <div class="category-title">📊 Анализи и прогнози</div>
+                        <div class="category-desc">Споделете вашите анализи, прогнози и стратегии за залагане</div>
+                    </a>
+                    <a th:href="@{/forum/category/UFC_HISTORY}" class="category-item" tabindex="0" role="button" aria-label="История на UFC">
+                        <div class="category-title">🏆 История на UFC</div>
+                        <div class="category-desc">Легендарни боеве, исторически моменти и развитие на промоцията</div>
+                    </a>
+                    <a th:href="@{/forum/category/BULGARIAN_FIGHTERS}" class="category-item" tabindex="0" role="button" aria-label="Български бойци">
+                        <div class="category-title">🇧🇬 Български бойци</div>
+                        <div class="category-desc">Следете и подкрепяйте българските бойци в UFC и MMA</div>
+                    </a>
+                </div>
+                <div class="forum-link-container">
+                    <a th:href="@{/forum}" class="btn btn-primary forum-link-btn">Към форума →</a>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <section class="sidebar-section">
+                    <h4>Статистики на форума</h4>
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <div class="stat-number" th:text="${activeUserCount} ?: '1,247'">1,247</div>
+                            <div class="stat-label">Членове</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">15,892</div>
+                            <div class="stat-label">Теми</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">67,543</div>
+                            <div class="stat-label">Постове</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">142</div>
+                            <div class="stat-label">Онлайн</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="sidebar-section">
+                    <h4>Последни теми</h4>
+                    <ul class="recent-topics">
+                        <li><a href="#" title="Прочети повече">UFC 295: Обсъждане на резултатите</a></li>
+                        <li><a href="#" title="Прочети повече">Предстоящ боен дебют на Борислав Никифоров</a></li>
+                        <li><a href="#" title="Прочети повече">Анализ: Кой ще спечели следващия титул?</a></li>
+                        <li><a href="#" title="Прочети повече">История: Най-добрите боеве от 2024</a></li>
+                        <li><a href="#" title="Прочети повече">Тренировъчни съвети от професионалисти</a></li>
+                    </ul>
+                </section>
+
+                <section class="sidebar-section">
+                    <h4>Предстоящо събитие</h4>
+                    <div style="text-align: center;">
+                        <div style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; padding: 1rem; border-radius: 10px; margin-bottom: 1rem;">
+                            <strong>UFC 296</strong><br>
+                            <time datetime="2024-12-16">16 Декември 2024</time>
+                        </div>
+                        <p style="color: #cccccc;">Не пропускайте голямото събитие! Обсъдете прогнозите си в нашия форум.</p>
+                    </div>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>За нас</h5>
+                    <p>UFC България е независим форум, създаден от фенове за фенове на UFC и MMA спорта в България.</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Полезни връзки</h5>
+                    <a href="#" title="Правила на форума">Правила на форума</a>
+                    <a href="#" title="Често задавани въпроси">Често задавани въпроси</a>
+                    <a href="#" title="Контакти">Контакти</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Последвайте ни</h5>
+                    <a href="#" title="Facebook страница" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="#" title="Instagram профил" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="#" title="YouTube канал" target="_blank" rel="noopener noreferrer">YouTube</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 UFC България Форум. Всички права запазени. Този сайт не е свързан официално с UFC.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

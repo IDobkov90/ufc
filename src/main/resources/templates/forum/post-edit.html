@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редактиране на коментар - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/forum}" class="active">Форум</a></li>
+                    <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                    <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                    <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
+                    <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="form-container" style="max-width: 800px;">
+            <h2>Редактиране на коментар</h2>
+
+            <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+                ❌ <span th:text="${errorMessage}">Error!</span>
+            </div>
+
+            <form th:action="@{/forum/post/edit/{id}(id=${postId})}" th:object="${postCreateDto}" method="post" class="reply-form">
+                <input type="hidden" th:field="*{topicId}" th:value="${topicId}" />
+
+                <div class="form-group">
+                    <label for="content">Съдържание на коментара *</label>
+                    <textarea id="content"
+                              th:field="*{content}"
+                              class="form-control"
+                              rows="10"
+                              placeholder="Редактирайте вашия коментар..."
+                              required></textarea>
+                    <span class="error-message" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content error</span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Запази промените</button>
+                    <a th:href="@{/forum/topic/{id}(id=${topicId})}" class="btn btn-secondary">Отказ</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 UFC България. Всички права запазени.</p>
+        </div>
+    </footer>
+</body>
+</html>
+

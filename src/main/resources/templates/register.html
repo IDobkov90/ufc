@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Регистрация - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <div class="container">
+        <div class="header-content">
+            <a th:href="@{/}" class="logo">
+                <div class="logo-icon">UFC</div>
+                <h1>UFC България</h1>
+            </a>
+            <div class="auth-buttons">
+                <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+            </div>
+        </div>
+    </div>
+</header>
+
+<nav>
+    <div class="container">
+        <div class="nav-content">
+            <ul class="nav-links">
+                <li><a th:href="@{/}">Начало</a></li>
+                <li><a href="#" title="Форум (Скоро)">Форум</a></li>
+                <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
+                <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<main class="container">
+    <div class="form-container">
+        <h2>Регистрация</h2>
+        <p>Присъединете се към най-голямата UFC общност в България!</p>
+
+        <form th:action="@{/user/register}" th:object="${userRegistrationDto}" method="post" class="form-styled">
+            <div class="form-group">
+                <label for="username">Потребителско име *</label>
+                <input type="text" id="username" th:field="*{username}" required minlength="3" maxlength="20"
+                       aria-required="true" aria-describedby="username-error"/>
+                <div class="error-message" id="username-error" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+            </div>
+            <div class="form-group">
+                <label for="email">Имейл *</label>
+                <input type="email" id="email" th:field="*{email}" required
+                       aria-required="true" aria-describedby="email-error"/>
+                <div class="error-message" id="email-error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+            </div>
+            <div class="form-group">
+                <label for="password">Парола *</label>
+                <input type="password" id="password" th:field="*{password}" required minlength="6"
+                       aria-required="true" aria-describedby="password-error"/>
+                <small style="color: #999; font-size: 0.85rem;">Минимум 6 символа</small>
+                <div class="error-message" id="password-error" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+            </div>
+            <div class="form-group">
+                <label for="firstName">Име *</label>
+                <input type="text" id="firstName" th:field="*{firstName}"
+                       aria-describedby="firstName-error"/>
+                <div class="error-message" id="firstName-error" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></div>
+            </div>
+            <div class="form-group">
+                <label for="lastName">Фамилия *</label>
+                <input type="text" id="lastName" th:field="*{lastName}"
+                       aria-describedby="lastName-error"/>
+                <div class="error-message" id="lastName-error" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></div>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Регистрация</button>
+            <p style="text-align: center; margin-top: 1rem; color: #cccccc;">
+                Вече имате акаунт? <a th:href="@{/login}" style="color: #d4af37;">Влезте тук</a>
+            </p>
+        </form>
+    </div>
+</main>
+
+<footer>
+    <div class="container">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h5>За нас</h5>
+                <p>UFC България е независим форум, създаден от фенове за фенове на UFC и MMA спорта в България.</p>
+            </div>
+            <div class="footer-section">
+                <h5>Полезни връзки</h5>
+                <a href="#" title="Правила на форума">Правила на форума</a>
+                <a href="#" title="Често задавани въпроси">Често задавани въпроси</a>
+                <a href="#" title="Контакти">Контакти</a>
+            </div>
+            <div class="footer-section">
+                <h5>Последвайте ни</h5>
+                <a href="#" title="Facebook страница" target="_blank" rel="noopener noreferrer">Facebook</a>
+                <a href="#" title="Instagram профил" target="_blank" rel="noopener noreferrer">Instagram</a>
+                <a href="#" title="YouTube канал" target="_blank" rel="noopener noreferrer">YouTube</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2024 UFC България Форум. Всички права запазени. Този сайт не е свързан официално с UFC.</p>
+        </div>
+    </div>
+</footer>
+</body>
+</html>

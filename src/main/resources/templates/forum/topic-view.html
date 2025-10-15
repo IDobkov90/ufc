@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title th:text="${topic.title} + ' - UFC България'">Topic - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                        <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/forum}" class="active">Форум</a></li>
+                    <li><a href="#" title="Новини (Скоро)">Новини</a></li>
+                    <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
+                    <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
+                    <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <!-- Success/Error Messages -->
+        <div th:if="${successMessage}" class="alert alert-success" role="alert">
+            ✅ <span th:text="${successMessage}">Success!</span>
+        </div>
+
+        <div th:if="${errorMessage}" class="alert alert-danger" role="alert">
+            ❌ <span th:text="${errorMessage}">Error!</span>
+        </div>
+
+        <div class="breadcrumb">
+            <a th:href="@{/forum}">Форум</a>
+            <span class="separator">›</span>
+            <a th:href="@{/forum/category/{category}(category=${topic.category})}"
+               th:text="${topic.category.displayName}">Category</a>
+            <span class="separator">›</span>
+            <span th:text="${topic.title}">Topic Title</span>
+        </div>
+
+        <div class="topic-header">
+            <div class="topic-badges">
+                <span th:if="${topic.isPinned}" class="badge badge-pinned" title="Закачена тема">📌 Закачена</span>
+                <span th:if="${topic.isLocked}" class="badge badge-locked" title="Заключена тема">🔒 Заключена</span>
+                <span class="badge badge-category" th:text="${topic.category.displayName}">Category</span>
+            </div>
+            <h2 th:text="${topic.title}">Topic Title</h2>
+            <div class="topic-stats-inline">
+                <span>👁️ <strong th:text="${topic.viewCount}">0</strong> прегледа</span>
+                <span>💬 <strong th:text="${topic.replyCount}">0</strong> отговора</span>
+                <span>📅 <span th:text="${#temporals.format(topic.createdAt, 'dd.MM.yyyy HH:mm')}">Date</span></span>
+            </div>
+        </div>
+
+        <!-- Original Topic Post -->
+        <div class="topic-content">
+            <div class="post original-post">
+                <div class="post-author">
+                    <div class="author-avatar">
+                        <span th:text="${#strings.substring(topic.authorUsername, 0, 1).toUpperCase()}">A</span>
+                    </div>
+                    <div class="author-info">
+                        <a th:href="@{/user/profile/{username}(username=${topic.authorUsername})}" class="author-name username-link" th:text="${topic.authorUsername}">Author</a>
+                        <div class="author-role">Автор на темата</div>
+                        <div class="author-joined">
+                            Член от: <span th:text="${#temporals.format(topic.createdAt, 'dd.MM.yyyy')}">Date</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-body" th:utext="${#strings.replace(#strings.escapeXml(topic.content), '&#10;', '&lt;br&gt;')}">
+                        Content goes here
+                    </div>
+                    <div class="post-footer">
+                        <span class="post-date" th:text="${#temporals.format(topic.createdAt, 'dd.MM.yyyy HH:mm')}">Date</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Posts/Comments Section -->
+        <div th:if="${posts != null and !posts.isEmpty()}" class="posts-section">
+            <h3 class="posts-heading">Отговори (<span th:text="${#lists.size(posts)}">0</span>)</h3>
+
+            <div th:each="post, iterStat : ${posts}" class="post">
+                <div class="post-author">
+                    <div class="author-avatar">
+                        <span th:text="${#strings.substring(post.authorUsername, 0, 1).toUpperCase()}">A</span>
+                    </div>
+                    <div class="author-info">
+                        <a th:href="@{/user/profile/{username}(username=${post.authorUsername})}" class="author-name username-link" th:text="${post.authorUsername}">Author</a>
+                        <div class="author-role">Член</div>
+                    </div>
+                </div>
+                <div class="post-content">
+                    <div class="post-body" th:utext="${#strings.replace(#strings.escapeXml(post.content), '&#10;', '&lt;br&gt;')}">
+                        Comment content
+                    </div>
+                    <div class="post-footer">
+                        <span class="post-date" th:text="${#temporals.format(post.createdAt, 'dd.MM.yyyy HH:mm')}">Date</span>
+                        <span th:if="${post.isEdited}" class="post-edited">(редактиран)</span>
+
+                        <!-- Edit/Delete buttons for post author -->
+                        <div sec:authorize="isAuthenticated()" class="post-actions" th:if="${currentUserId != null and (currentUserId == post.authorId or canModifyTopic)}">
+                            <a th:href="@{/forum/post/edit/{id}(id=${post.id})}" class="btn-small btn-secondary">✏️ Редактирай</a>
+                            <form th:action="@{/forum/post/delete/{id}(id=${post.id})}" method="post" style="display: inline;"
+                                  onsubmit="return confirm('Сигурни ли сте, че искате да изтриете този коментар?');">
+                                <button type="submit" class="btn-small btn-danger">🗑️ Изтрий</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${posts == null or posts.isEmpty()}" class="no-replies">
+            <p>💬 Все още няма отговори на тази тема.</p>
+            <p sec:authorize="isAuthenticated()">Бъдете първият, който коментира!</p>
+        </div>
+
+        <!-- Reply Form -->
+        <div class="reply-section" sec:authorize="isAuthenticated()">
+            <h3>Добави отговор</h3>
+
+            <div th:if="${topic.isLocked}" class="alert alert-info">
+                🔒 Темата е заключена и не може да приема нови коментари.
+            </div>
+
+            <form th:if="${!topic.isLocked}" th:action="@{/forum/post/create}" th:object="${postCreateDto}" method="post" class="reply-form">
+                <input type="hidden" name="topicId" th:value="${topic.id}" />
+
+                <div class="form-group">
+                    <label for="content">Вашият коментар *</label>
+                    <textarea id="content"
+                              th:field="*{content}"
+                              class="form-control"
+                              rows="6"
+                              placeholder="Напишете вашия отговор..."
+                              required></textarea>
+                    <span class="error-message" th:if="${#fields.hasErrors('content')}" th:errors="*{content}">Content error</span>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💬 Публикувай отговор</button>
+                    <a th:href="@{/forum}" class="btn btn-secondary">Отказ</a>
+                </div>
+            </form>
+        </div>
+
+        <div class="reply-section" sec:authorize="!isAuthenticated()">
+            <div class="login-prompt-box">
+                <p>За да отговорите на тази тема, моля <a th:href="@{/login}">влезте в профила си</a> или <a th:href="@{/user/register}">се регистрирайте</a>.</p>
+            </div>
+        </div>
+
+        <div class="topic-navigation">
+            <a th:href="@{/forum}" class="btn btn-secondary">← Назад към форума</a>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2025 UFC България. Всички права запазени.</p>
+        </div>
+    </footer>
+</body>
+</html>
