@@ -11,6 +11,7 @@ import org.springframework.security.authentication.dao.DaoAuthenticationProvider
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -44,6 +45,16 @@ public class SecurityConfig {
         authProvider.setUserDetailsService(userDetailsService);
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
+    }
+
+    /**
+     * WebSecurityCustomizer to completely bypass Spring Security for static resources.
+     * This ensures CSS, JS, and images are served without any security processing.
+     */
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        return (web) -> web.ignoring()
+                .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico", "/webjars/**");
     }
 
     /**
@@ -87,9 +98,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests(authz -> authz
                         // Public endpoints for the web application
                         .requestMatchers("/", "/home", "/login", "/user/register").permitAll()
-                        .requestMatchers("/css/**", "/js/**", "/images/**", "/favicon.ico").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/error").permitAll()
+                        // Search functionality
+                        .requestMatchers("/search").permitAll()
                         // Forum - public viewing, authenticated for creation
                         .requestMatchers("/forum", "/forum/category/**", "/forum/topic/{id:[0-9]+}").permitAll()
                         .requestMatchers("/forum/topic/new").authenticated()

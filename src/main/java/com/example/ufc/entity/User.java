@@ -203,6 +203,15 @@ public class User extends BaseEntity {
         this.isActive = isActive;
     }
 
+    // Convenience methods for admin operations (enabled = active)
+    public Boolean getEnabled() {
+        return isActive;
+    }
+
+    public void setEnabled(Boolean enabled) {
+        this.isActive = enabled;
+    }
+
     public Boolean getEmailVerified() {
         return emailVerified;
     }
@@ -291,3 +300,4 @@ public class User extends BaseEntity {
         this.activities = activities;
     }
 }
+

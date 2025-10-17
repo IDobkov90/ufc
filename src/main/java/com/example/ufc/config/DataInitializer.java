@@ -5,6 +5,7 @@ import com.example.ufc.repository.UserRepository;
 import com.example.ufc.repository.TopicRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
@@ -18,6 +19,9 @@ public class DataInitializer implements CommandLineRunner {
     @Autowired
     private TopicRepository topicRepository;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Override
     public void run(String... args) throws Exception {
         if (userRepository.count() == 0) {
@@ -30,21 +34,24 @@ public class DataInitializer implements CommandLineRunner {
         User admin = new User();
         admin.setUsername("admin");
         admin.setEmail("admin@ufcbg.com");
-        admin.setPassword("admin123"); // In real app, encode this!
+        admin.setPassword(passwordEncoder.encode("admin123")); // Properly encoded password
         admin.setFirstName("Admin");
         admin.setLastName("User");
         admin.setRole(Role.ADMIN);
         admin.setEmailVerified(true);
+        admin.setEnabled(true);
         userRepository.save(admin);
 
         // Create sample user
         User user = new User();
         user.setUsername("ufcfan");
         user.setEmail("fan@ufcbg.com");
-        user.setPassword("password123");
+        user.setPassword(passwordEncoder.encode("password123")); // Properly encoded password
         user.setFirstName("UFC");
         user.setLastName("Fan");
+        user.setRole(Role.USER);
         user.setEmailVerified(true);
+        user.setEnabled(true);
         userRepository.save(user);
 
         // Create sample topics

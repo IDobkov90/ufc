@@ -1,0 +1,104 @@
+                    <li><a th:href="@{/admin/analytics}">Статистики</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="form-container" style="max-width: 700px;">
+            <h2>✏️ Редакция на Потребител</h2>
+            <p>Редактирайте информацията за потребителя</p>
+
+            <form th:action="@{/admin/users/{id}/update(id=${user.id})}" method="post" th:object="${user}" class="form-styled">
+
+                <div class="form-group">
+                    <label for="username">Потребителско име</label>
+                    <input type="text" id="username" name="username" th:value="${user.username}" required minlength="3" maxlength="20">
+                </div>
+
+                <div class="form-group">
+                    <label for="email">Имейл</label>
+                    <input type="email" id="email" name="email" th:value="${user.email}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="bio">Биография</label>
+                    <textarea id="bio" name="bio" rows="4" maxlength="500" th:text="${user.bio}"></textarea>
+                    <span class="form-help">Максимум 500 символа</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="role">Роля</label>
+                    <select id="role" name="role">
+                        <option value="USER" th:selected="${user.role.name() == 'USER'}">Потребител</option>
+                        <option value="ADMIN" th:selected="${user.role.name() == 'ADMIN'}">Администратор</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="enabled">Статус</label>
+                    <select id="enabled" name="enabled">
+                        <option value="true" th:selected="${user.enabled}">Активен</option>
+                        <option value="false" th:selected="${!user.enabled}">Блокиран</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <p><strong>Регистриран на:</strong> <span th:text="${#temporals.format(user.createdAt, 'dd.MM.yyyy HH:mm')}">date</span></p>
+                </div>
+
+                <div class="form-actions">
+                    <button type="submit" class="btn btn-primary">💾 Запази промените</button>
+                    <a th:href="@{/admin/users}" class="btn btn-secondary">Отказ</a>
+                </div>
+            </form>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 UFC България Форум - Админ Панел</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Редакция на Потребител - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България - Админ</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">Admin</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/admin/dashboard}">Табло</a></li>
+                    <li><a th:href="@{/admin/users}" class="active">Потребители</a></li>
+                    <li><a th:href="@{/admin/topics}">Теми</a></li>
+                    <li><a th:href="@{/admin/comments}">Коментари</a></li>
+

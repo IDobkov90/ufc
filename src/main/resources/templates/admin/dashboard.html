@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Админ Панел - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България - Админ</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">Admin</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}" class="active">Начало</a></li>
+                    <li><a th:href="@{/admin/dashboard}" class="active">Табло</a></li>
+                    <li><a th:href="@{/admin/users}">Потребители</a></li>
+                    <li><a th:href="@{/admin/topics}">Теми</a></li>
+                    <li><a th:href="@{/admin/comments}">Коментари</a></li>
+                    <li><a th:href="@{/admin/analytics}">Статистики</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="admin-dashboard">
+            <h2>📊 Админ Панел - Общ Преглед</h2>
+
+            <!-- Statistics Overview -->
+            <div class="admin-stats-grid">
+                <div class="admin-stat-card">
+                    <div class="stat-icon">👥</div>
+                    <div class="stat-info">
+                        <div class="stat-value" th:text="${stats.totalUsers}">0</div>
+                        <div class="stat-label">Общо Потребители</div>
+                        <div class="stat-details">
+                            <span class="stat-detail-item">
+                                <span class="stat-detail-label">Активни:</span>
+                                <span class="stat-detail-value" th:text="${stats.activeUsers}">0</span>
+                            </span>
+                            <span class="stat-detail-item">
+                                <span class="stat-detail-label">Блокирани:</span>
+                                <span class="stat-detail-value" th:text="${stats.bannedUsers}">0</span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-info">
+                        <div class="stat-value" th:text="${stats.totalTopics}">0</div>
+                        <div class="stat-label">Общо Теми</div>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="stat-icon">💬</div>
+                    <div class="stat-info">
+                        <div class="stat-value" th:text="${stats.totalPosts}">0</div>
+                        <div class="stat-label">Общо Постове</div>
+                    </div>
+                </div>
+
+                <div class="admin-stat-card">
+                    <div class="stat-icon">💭</div>
+                    <div class="stat-info">
+                        <div class="stat-value" th:text="${stats.totalComments}">0</div>
+                        <div class="stat-label">Общо Коментари</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Recent Activity -->
+            <div class="admin-content-grid">
+                <section class="admin-section">
+                    <h3>👥 Нови Потребители</h3>
+                    <div class="admin-list">
+                        <div th:if="${recentUsers.isEmpty()}" class="empty-state">
+                            <p>Няма нови потребители</p>
+                        </div>
+                        <div th:each="user : ${recentUsers}" class="admin-list-item">
+                            <div class="admin-list-info">
+                                <strong th:text="${user.username}">Username</strong>
+                                <span class="admin-list-meta">
+                                    <span th:text="${user.email}">email@example.com</span> •
+                                    <span th:text="${#temporals.format(user.createdAt, 'dd.MM.yyyy HH:mm')}">date</span>
+                                </span>
+                            </div>
+                            <div class="admin-list-actions">
+                                <a th:href="@{/admin/users/{id}/edit(id=${user.id})}" class="btn-admin-small">Редактирай</a>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="admin-section">
+                    <h3>📝 Последни Теми</h3>
+                    <div class="admin-list">
+                        <div th:if="${recentTopics.isEmpty()}" class="empty-state">
+                            <p>Няма нови теми</p>
+                        </div>
+                        <div th:each="topic : ${recentTopics}" class="admin-list-item">
+                            <div class="admin-list-info">
+                                <strong><a th:href="@{/forum/topic/{id}(id=${topic.id})}" th:text="${topic.title}">Topic Title</a></strong>
+                                <span class="admin-list-meta">
+                                    от <span th:text="${topic.author.username}">author</span> •
+                                    <span th:text="${#temporals.format(topic.createdAt, 'dd.MM.yyyy HH:mm')}">date</span>
+                                </span>
+                            </div>
+                            <div class="admin-list-actions">
+                                <form th:if="${!topic.pinned}" th:action="@{/admin/topics/{id}/pin(id=${topic.id})}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn-admin-small">📌 Закачи</button>
+                                </form>
+                                <form th:if="${topic.pinned}" th:action="@{/admin/topics/{id}/unpin(id=${topic.id})}" method="post" style="display: inline;">
+                                    <button type="submit" class="btn-admin-small">📌 Откачи</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+
+            <!-- Quick Actions -->
+            <section class="admin-section">
+                <h3>⚡ Бързи Действия</h3>
+                <div class="admin-quick-actions">
+                    <a th:href="@{/admin/users}" class="admin-action-btn">
+                        <span class="action-icon">👥</span>
+                        <span class="action-text">Управление на Потребители</span>
+                    </a>
+                    <a th:href="@{/admin/topics}" class="admin-action-btn">
+                        <span class="action-icon">📝</span>
+                        <span class="action-text">Управление на Теми</span>
+                    </a>
+                    <a th:href="@{/admin/comments}" class="admin-action-btn">
+                        <span class="action-icon">💭</span>
+                        <span class="action-text">Управление на Коментари</span>
+                    </a>
+                    <a th:href="@{/admin/analytics}" class="admin-action-btn">
+                        <span class="action-icon">📊</span>
+                        <span class="action-text">Статистики и Анализи</span>
+                    </a>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 UFC България Форум - Админ Панел</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

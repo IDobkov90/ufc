@@ -142,12 +142,22 @@ public class Topic extends BaseEntity {
         this.isPinned = isPinned;
     }
 
+    // Convenience setter for admin operations
+    public void setPinned(Boolean pinned) {
+        this.isPinned = pinned;
+    }
+
     public Boolean getIsLocked() {
         return isLocked;
     }
 
     public void setIsLocked(Boolean isLocked) {
         this.isLocked = isLocked;
+    }
+
+    // Convenience setter for admin operations
+    public void setLocked(Boolean locked) {
+        this.isLocked = locked;
     }
 
     public LocalDateTime getLastPostAt() {

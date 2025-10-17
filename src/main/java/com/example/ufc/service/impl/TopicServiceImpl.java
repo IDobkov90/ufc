@@ -85,4 +85,96 @@ public class TopicServiceImpl implements TopicService {
             topicRepository.save(topic);
         });
     }
+
+    // Admin methods implementation
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalTopicCount() {
+        return topicRepository.count();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getPinnedTopicCount() {
+        return topicRepository.countByIsPinnedTrue();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getLockedTopicCount() {
+        return topicRepository.countByIsLockedTrue();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Topic> getAllTopics() {
+        return topicRepository.findAllByOrderByCreatedAtDesc();
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Topic> getRecentTopics(int limit) {
+        return topicRepository.findRecentTopics(limit);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Topic> searchTopics(String search) {
+        return topicRepository.searchByTitleOrContent(search);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<Topic> getTopicsByCategory(String category) {
+        return topicRepository.findByCategory(TopicCategory.valueOf(category.toUpperCase()));
+    }
+
+    @Override
+    public void pinTopic(Long id) {
+        Topic topic = topicRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Topic not found with id: " + id));
+        topic.setPinned(true);
+        topicRepository.save(topic);
+    }
+
+    @Override
+    public void unpinTopic(Long id) {
+        Topic topic = topicRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Topic not found with id: " + id));
+        topic.setPinned(false);
+        topicRepository.save(topic);
+    }
+
+    @Override
+    public void lockTopic(Long id) {
+        Topic topic = topicRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Topic not found with id: " + id));
+        topic.setLocked(true);
+        topicRepository.save(topic);
+    }
+
+    @Override
+    public void unlockTopic(Long id) {
+        Topic topic = topicRepository.findById(id)
+            .orElseThrow(() -> new RuntimeException("Topic not found with id: " + id));
+        topic.setLocked(false);
+        topicRepository.save(topic);
+    }
+
+    @Override
+    public void deleteTopic(Long id) {
+        topicRepository.deleteById(id);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public java.util.Map<String, Long> getTopicCountByCategory() {
+        java.util.Map<String, Long> categoryCounts = new java.util.HashMap<>();
+        for (TopicCategory category : TopicCategory.values()) {
+            long count = topicRepository.countByCategory(category);
+            categoryCounts.put(category.name(), count);
+        }
+        return categoryCounts;
+    }
 }

@@ -19,4 +19,7 @@ public interface PostService {
     void deletePost(Long postId, User user);
     boolean canUserModifyPost(Post post, User user);
     long countByTopicId(Long topicId);
+
+    // Admin methods
+    long getTotalPostCount();
 }

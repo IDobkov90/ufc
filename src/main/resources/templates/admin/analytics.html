@@ -1,0 +1,159 @@
+                    <li><a th:href="@{/admin/dashboard}">Табло</a></li>
+                    <li><a th:href="@{/admin/users}">Потребители</a></li>
+                    <li><a th:href="@{/admin/topics}">Теми</a></li>
+                    <li><a th:href="@{/admin/comments}">Коментари</a></li>
+                    <li><a th:href="@{/admin/analytics}" class="active">Статистики</a></li>
+                </ul>
+            </div>
+        </nav>
+
+    <main class="container">
+        <div class="admin-page">
+            <h2>📊 Статистики и Анализи</h2>
+
+            <!-- User Analytics -->
+            <section class="analytics-section">
+                <h3>👥 Статистика на Потребителите</h3>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.totalUsers}">0</div>
+                        <div class="analytics-label">Общо Потребители</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.activeUsers}">0</div>
+                        <div class="analytics-label">Активни Потребители</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.bannedUsers}">0</div>
+                        <div class="analytics-label">Блокирани Потребители</div>
+                    </div>
+                </div>
+
+                <h4>🆕 Нови Регистрации</h4>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.newUsersToday}">0</div>
+                        <div class="analytics-label">Днес</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.newUsersThisWeek}">0</div>
+                        <div class="analytics-label">Тази Седмица</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.newUsersThisMonth}">0</div>
+                        <div class="analytics-label">Този Месец</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Content Analytics -->
+            <section class="analytics-section">
+                <h3>📝 Статистика на Съдържанието</h3>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.totalTopics}">0</div>
+                        <div class="analytics-label">Общо Теми</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.totalPosts}">0</div>
+                        <div class="analytics-label">Общо Постове</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.totalComments}">0</div>
+                        <div class="analytics-label">Общо Коментари</div>
+                    </div>
+                </div>
+
+                <h4>📌 Специални Теми</h4>
+                <div class="analytics-grid">
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.pinnedTopics}">0</div>
+                        <div class="analytics-label">Закачени Теми</div>
+                    </div>
+                    <div class="analytics-card">
+                        <div class="analytics-value" th:text="${analytics.lockedTopics}">0</div>
+                        <div class="analytics-label">Заключени Теми</div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Top Contributors -->
+            <section class="analytics-section">
+                <h3>🏆 Топ Потребители</h3>
+                <div class="top-contributors-list">
+                    <div th:if="${analytics.topPosters.isEmpty()}" class="empty-state">
+                        <p>Няма данни</p>
+                    </div>
+                    <div th:each="user, iterStat : ${analytics.topPosters}" class="contributor-item">
+                        <div class="contributor-rank" th:text="${iterStat.index + 1}">1</div>
+                        <div class="contributor-info">
+                            <a th:href="@{/user/profile/{username}(username=${user.username})}" th:text="${user.username}">Username</a>
+                        </div>
+                        <div class="contributor-stats">
+                            <span class="contributor-stat">
+                                Теми: <strong th:text="${user.topics != null ? user.topics.size() : 0}">0</strong>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Topics by Category -->
+            <section class="analytics-section">
+                <h3>📂 Теми по Категории</h3>
+                <div class="category-stats-list">
+                    <div th:each="entry : ${analytics.topicsByCategory}" class="category-stat-item">
+                        <div class="category-stat-name" th:text="${entry.key}">Category</div>
+                        <div class="category-stat-bar">
+                            <div class="category-stat-fill" th:style="'width: ' + ${entry.value * 10} + '%'"></div>
+                        </div>
+                        <div class="category-stat-value" th:text="${entry.value}">0</div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 UFC България Форум - Админ Панел</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Статистики и Анализи - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България - Админ</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">Admin</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+

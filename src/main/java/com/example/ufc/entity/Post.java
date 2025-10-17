@@ -41,6 +41,9 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "quoted_post_id")
     private Post quotedPost;
 
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<Comment> comments = new java.util.ArrayList<>();
+
     // Constructors
     public Post() {}
 
@@ -166,5 +169,13 @@ public class Post extends BaseEntity {
 
     public void setQuotedPost(Post quotedPost) {
         this.quotedPost = quotedPost;
+    }
+
+    public java.util.List<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(java.util.List<Comment> comments) {
+        this.comments = comments;
     }
 }

@@ -40,6 +40,10 @@
                     <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
                     <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
                     <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+                    <!-- Admin Panel Link - Only visible to ADMIN users -->
+                    <li sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/admin/dashboard}" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; padding: 10px 15px; border-radius: 20px; font-weight: bold;">⚙️ Админ</a>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -151,4 +155,3 @@
     </footer>
 </body>
 </html>
-

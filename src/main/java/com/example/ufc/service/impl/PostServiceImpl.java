@@ -127,4 +127,10 @@ public class PostServiceImpl implements PostService {
     public long countByTopicId(Long topicId) {
         return postRepository.countByTopicId(topicId);
     }
+
+    @Override
+    @Transactional(readOnly = true)
+    public long getTotalPostCount() {
+        return postRepository.count();
+    }
 }
