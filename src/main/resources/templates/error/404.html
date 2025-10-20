@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404 - Страницата не е намерена</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="error-page">
+            <div class="error-icon">🔍</div>
+            <h1 class="error-code">404</h1>
+            <h2 class="error-title">Страницата не беше намерена</h2>
+            <p class="error-message" th:text="${errorMessage} ?: 'Търсената от вас страница не съществува.'">
+                Търсената от вас страница не съществува.
+            </p>
+            <p class="error-details" th:if="${requestedUrl}">
+                Заявен адрес: <code th:text="${requestedUrl}"></code>
+            </p>
+            <div class="error-actions">
+                <a th:href="@{/}" class="btn btn-primary">🏠 Начало</a>
+                <a th:href="@{/forum}" class="btn btn-secondary">💬 Форум</a>
+                <a href="javascript:history.back()" class="btn btn-secondary">← Назад</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 UFC България Форум</p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .error-page {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .error-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #d4af37;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            color: #e0e0e0;
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .error-details {
+            background: rgba(212, 175, 55, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 2rem;
+            color: #b0b0b0;
+        }
+
+        .error-details code {
+            color: #ffd700;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</body>
+</html>
+

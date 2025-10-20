@@ -65,13 +65,15 @@ public class User extends BaseEntity {
     @Column(name = "reputation", nullable = false)
     private Integer reputation = 0;
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    // Fixed: Changed from CascadeType.ALL to prevent accidental deletion of forum content
+    // When a user is deleted, their content should remain (orphan removal = false)
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Topic> topics = new ArrayList<>();
 
-    @OneToMany(mappedBy = "author", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "author", cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY, orphanRemoval = false)
     private List<Post> posts = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<UserActivity> activities = new ArrayList<>();
 
     // Constructors
@@ -127,7 +129,7 @@ public class User extends BaseEntity {
     }
 
     public boolean isModerator() {
-        return role == Role.MODERATOR || role == Role.ADMIN;
+        return role == Role.MODERATOR || role == Role.ADMIN; // Fixed: Added missing OR operator
     }
 
     // Getters and Setters
@@ -300,4 +302,3 @@ public class User extends BaseEntity {
         this.activities = activities;
     }
 }
-

@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>500 - Сървърна грешка</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
+        <div class="error-page">
+            <div class="error-icon">⚠️</div>
+            <h1 class="error-code">500</h1>
+            <h2 class="error-title">Сървърна грешка</h2>
+            <p class="error-message" th:text="${errorMessage} ?: 'Възникна неочаквана грешка. Моля опитайте отново.'">
+                Възникна неочаквана грешка. Моля опитайте отново.
+            </p>
+            <p class="error-hint">
+                Ако проблемът продължава, моля свържете се с администратор.
+            </p>
+            <div class="error-actions">
+                <a th:href="@{/}" class="btn btn-primary">🏠 Начало</a>
+                <a href="javascript:history.back()" class="btn btn-secondary">← Назад</a>
+                <a href="javascript:location.reload()" class="btn btn-secondary">🔄 Опитай отново</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-bottom">
+                <p>&copy; 2024 UFC България Форум</p>
+            </div>
+        </div>
+    </footer>
+
+    <style>
+        .error-page {
+            text-align: center;
+            padding: 4rem 2rem;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .error-icon {
+            font-size: 5rem;
+            margin-bottom: 1rem;
+        }
+
+        .error-code {
+            font-size: 6rem;
+            font-weight: bold;
+            color: #ff9800;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .error-title {
+            font-size: 2rem;
+            color: #ffd700;
+            margin-bottom: 1rem;
+        }
+
+        .error-message {
+            font-size: 1.2rem;
+            color: #e0e0e0;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .error-hint {
+            color: #b0b0b0;
+            margin-bottom: 2rem;
+        }
+
+        .error-actions {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+    </style>
+</body>
+</html>
+
