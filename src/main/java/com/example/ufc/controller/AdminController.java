@@ -3,6 +3,7 @@ package com.example.ufc.controller;
 import com.example.ufc.dto.UserUpdateDto;
 import com.example.ufc.entity.User;
 import com.example.ufc.entity.Topic;
+import com.example.ufc.entity.TopicCategory;
 import com.example.ufc.entity.Post;
 import com.example.ufc.entity.Comment;
 import com.example.ufc.service.UserService;
@@ -171,6 +172,7 @@ public class AdminController {
     @GetMapping("/topics")
     public String listTopics(@RequestParam(required = false) String search,
                             @RequestParam(required = false) String category,
+                            @RequestParam(defaultValue = "0") int page,
                             Model model) {
         List<Topic> topics;
 
@@ -182,9 +184,29 @@ public class AdminController {
             topics = topicService.getAllTopics();
         }
 
-        model.addAttribute("topics", topics);
+        // Calculate statistics
+        long pinnedCount = topics.stream().filter(topic -> topic.getIsPinned()).count();
+        long lockedCount = topics.stream().filter(topic -> topic.getIsLocked()).count();
+        long totalViews = topics.stream().mapToLong(Topic::getViewCount).sum();
+
+        // Simple pagination implementation
+        int pageSize = 20;
+        int start = page * pageSize;
+        int end = Math.min(start + pageSize, topics.size());
+        List<Topic> pageContent = topics.subList(start, end);
+
+        model.addAttribute("topics", pageContent);
+        model.addAttribute("currentPage", page);
+        model.addAttribute("totalPages", (int) Math.ceil((double) topics.size() / pageSize));
+        model.addAttribute("totalElements", topics.size());
+        model.addAttribute("hasNext", end < topics.size());
+        model.addAttribute("hasPrevious", page > 0);
+        model.addAttribute("pinnedCount", pinnedCount);
+        model.addAttribute("lockedCount", lockedCount);
+        model.addAttribute("totalViews", totalViews);
         model.addAttribute("search", search);
         model.addAttribute("category", category);
+        model.addAttribute("categories", TopicCategory.values());
 
         return "admin/topics";
     }
@@ -272,8 +294,21 @@ public class AdminController {
             comments = commentService.getAllComments();
         }
 
+        // Calculate statistics
+        long uniqueAuthors = comments.stream()
+                .map(comment -> comment.getAuthor().getId())
+                .distinct()
+                .count();
+
+        long uniquePosts = comments.stream()
+                .map(comment -> comment.getPost().getId())
+                .distinct()
+                .count();
+
         model.addAttribute("comments", comments);
         model.addAttribute("search", search);
+        model.addAttribute("uniqueAuthors", uniqueAuthors);
+        model.addAttribute("uniquePosts", uniquePosts);
 
         return "admin/comments";
     }
@@ -323,4 +358,3 @@ public class AdminController {
         return "admin/analytics";
     }
 }
-

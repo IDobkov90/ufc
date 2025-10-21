@@ -34,17 +34,25 @@
         <div class="container">
             <div class="nav-content">
                 <ul class="nav-links">
-                    <li><a th:href="@{/}">Начало</a></li>
-                    <li><a th:href="@{/forum}" class="active">Форум</a></li>
-                    <li><a href="#" title="Новини (Скоро)">Новини</a></li>
-                    <li><a href="#" title="Боеве (Скоро)">Боеве</a></li>
-                    <li><a href="#" title="Анализи (Скоро)">Анализи</a></li>
-                    <li><a href="#" title="Членове (Скоро)">Членове</a></li>
+                    <li><a th:href="@{/}">🏠 Начало</a></li>
+                    <li><a th:href="@{/forum}" class="active">💬 Форум</a></li>
+                    <li sec:authorize="isAuthenticated()">
+                        <a th:href="@{/user/profile/{username}(username=${#authentication.name})}">👤 Моят Профил</a>
+                    </li>
+                    <li><a th:href="@{/search}">🔍 Търсене</a></li>
                     <!-- Admin Panel Link - Only visible to ADMIN users -->
                     <li sec:authorize="hasRole('ADMIN')">
                         <a th:href="@{/admin/dashboard}" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; padding: 10px 15px; border-radius: 20px; font-weight: bold;">⚙️ Админ</a>
                     </li>
                 </ul>
+
+                <!-- Quick Search Form -->
+                <div class="nav-search">
+                    <form th:action="@{/search}" method="get" class="search-form-inline">
+                        <input type="text" name="q" placeholder="Търси в форума..." class="search-input-inline" required>
+                        <button type="submit" class="btn-search-inline">🔍</button>
+                    </form>
+                </div>
             </div>
         </div>
     </nav>
