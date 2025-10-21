@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Боеве - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                        <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}" class="btn btn-warning">⚙️ Админ Панел</a>
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/forum}">Форум</a></li>
+                    <li><a th:href="@{/news}">Новини</a></li>
+                    <li><a th:href="@{/fights}" class="active">Боеве</a></li>
+                    <li><a th:href="@{/analysis}">Анализи</a></li>
+                    <li><a th:href="@{/members}">Членове</a></li>
+                    <li sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/admin/dashboard}" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; padding: 10px 15px; border-radius: 20px; font-weight: bold;">⚙️ Админ</a>
+                    </li>
+                </ul>
+                <div class="search-form-nav">
+                    <form th:action="@{/search}" method="get" class="search-form-inline">
+                        <input type="text" name="query" placeholder="🔍 Търсене..." class="search-input-inline" required minlength="2">
+                        <button type="submit" class="btn-search-inline">Търси</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="page-header">
+            <h2>🥊 UFC Боеве и Събития</h2>
+            <p>Предстоящи и минали UFC събития, резултати и статистики</p>
+        </div>
+
+        <div class="content-grid">
+            <section class="main-content">
+                <!-- Upcoming Events Section -->
+                <div class="section-header">
+                    <h3>📅 Предстоящи Събития</h3>
+                </div>
+
+                <div class="fights-grid">
+                    <!-- Event 1 -->
+                    <article class="event-card">
+                        <div class="event-header" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1rem; border-radius: 10px 10px 0 0; color: white;">
+                            <h4 style="margin: 0;">UFC 296: Edwards vs. Covington</h4>
+                            <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">📍 T-Mobile Arena, Las Vegas</p>
+                        </div>
+                        <div class="event-body" style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 0 0 10px 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <span style="font-size: 1.1rem; font-weight: bold;">📆 16 Декември 2024</span>
+                                <span style="background: #ffd700; color: #000; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: bold;">Главен Бой</span>
+                            </div>
+                            <div class="fight-matchup" style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="text-align: center; flex: 1;">
+                                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🥊</div>
+                                        <strong>Leon Edwards</strong>
+                                        <div style="color: #ffd700; font-size: 0.9rem;">Шампион</div>
+                                    </div>
+                                    <div style="font-size: 2rem; color: #ff4444;">VS</div>
+                                    <div style="text-align: center; flex: 1;">
+                                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🥊</div>
+                                        <strong>Colby Covington</strong>
+                                        <div style="color: #888; font-size: 0.9rem;">Предизвикател</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a th:href="@{/forum/category/UPCOMING_EVENTS}" class="btn btn-primary" style="width: 100%; text-align: center;">Обсъди събитието</a>
+                        </div>
+                    </article>
+
+                    <!-- Event 2 -->
+                    <article class="event-card">
+                        <div class="event-header" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1rem; border-radius: 10px 10px 0 0; color: white;">
+                            <h4 style="margin: 0;">UFC Fight Night: Holloway vs. Allen</h4>
+                            <p style="margin: 0.5rem 0 0 0; font-size: 0.9rem;">📍 UFC Apex, Las Vegas</p>
+                        </div>
+                        <div class="event-body" style="padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 0 0 10px 10px;">
+                            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                                <span style="font-size: 1.1rem; font-weight: bold;">📆 13 Януари 2025</span>
+                                <span style="background: #6495ed; color: #fff; padding: 0.3rem 0.8rem; border-radius: 20px; font-weight: bold;">Fight Night</span>
+                            </div>
+                            <div class="fight-matchup" style="background: rgba(0,0,0,0.2); padding: 1rem; border-radius: 8px; margin-bottom: 1rem;">
+                                <div style="display: flex; justify-content: space-between; align-items: center;">
+                                    <div style="text-align: center; flex: 1;">
+                                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🥊</div>
+                                        <strong>Max Holloway</strong>
+                                        <div style="color: #888; font-size: 0.9rem;">Ранг #3</div>
+                                    </div>
+                                    <div style="font-size: 2rem; color: #ff4444;">VS</div>
+                                    <div style="text-align: center; flex: 1;">
+                                        <div style="font-size: 1.5rem; margin-bottom: 0.5rem;">🥊</div>
+                                        <strong>Arnold Allen</strong>
+                                        <div style="color: #888; font-size: 0.9rem;">Ранг #7</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <a th:href="@{/forum/category/UPCOMING_EVENTS}" class="btn btn-primary" style="width: 100%; text-align: center;">Обсъди събитието</a>
+                        </div>
+                    </article>
+                </div>
+
+                <!-- Recent Results Section -->
+                <div class="section-header" style="margin-top: 2rem;">
+                    <h3>📊 Последни Резултати</h3>
+                </div>
+
+                <div class="results-list">
+                    <div class="result-item" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border-left: 4px solid #4caf50;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                            <div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: #4caf50;">UFC 295: Prochazka vs. Pereira</h4>
+                                <p style="margin: 0; color: #888;">Madison Square Garden, New York • 11 Ноември 2024</p>
+                            </div>
+                            <div>
+                                <span style="background: #4caf50; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;">ЗАВЪРШЕН</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <strong>Главен бой:</strong> Alex Pereira победи Jiri Prochazka чрез TKO (2-ри рунд)
+                        </div>
+                    </div>
+
+                    <div class="result-item" style="background: rgba(255,255,255,0.05); padding: 1rem; border-radius: 10px; margin-bottom: 1rem; border-left: 4px solid #4caf50;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+                            <div>
+                                <h4 style="margin: 0 0 0.5rem 0; color: #4caf50;">UFC 294: Makhachev vs. Volkanovski</h4>
+                                <p style="margin: 0; color: #888;">Etihad Arena, Abu Dhabi • 21 Октомври 2024</p>
+                            </div>
+                            <div>
+                                <span style="background: #4caf50; color: white; padding: 0.5rem 1rem; border-radius: 20px; font-weight: bold;">ЗАВЪРШЕН</span>
+                            </div>
+                        </div>
+                        <div style="margin-top: 1rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.1);">
+                            <strong>Главен бой:</strong> Islam Makhachev победи Alexander Volkanovski чрез KO (1-ви рунд)
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-box" style="margin-top: 2rem; padding: 1.5rem; background: rgba(100, 149, 237, 0.1); border-left: 4px solid #6495ed; border-radius: 8px;">
+                    <h4 style="margin-top: 0; color: #6495ed;">🔔 Предстоящи Функционалности</h4>
+                    <p>Този раздел скоро ще бъде разширен с:</p>
+                    <ul style="margin-bottom: 0;">
+                        <li>Пълна информация за всички UFC събития</li>
+                        <li>Детайлни резултати от боевете</li>
+                        <li>Статистики на бойците</li>
+                        <li>Възможност за прогнози и залагания</li>
+                        <li>Напомняния за предстоящи събития</li>
+                    </ul>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <section class="sidebar-section">
+                    <h4>🏆 Шампиони по категории</h4>
+                    <div class="champions-list">
+                        <div style="padding: 0.8rem; background: rgba(255,215,0,0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <strong style="color: #ffd700;">Тежка категория</strong>
+                            <div style="color: #ccc; font-size: 0.9rem;">Jon Jones</div>
+                        </div>
+                        <div style="padding: 0.8rem; background: rgba(255,215,0,0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <strong style="color: #ffd700;">Лека тежка</strong>
+                            <div style="color: #ccc; font-size: 0.9rem;">Alex Pereira</div>
+                        </div>
+                        <div style="padding: 0.8rem; background: rgba(255,215,0,0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <strong style="color: #ffd700;">Средна категория</strong>
+                            <div style="color: #ccc; font-size: 0.9rem;">Dricus Du Plessis</div>
+                        </div>
+                        <div style="padding: 0.8rem; background: rgba(255,215,0,0.1); border-radius: 8px; margin-bottom: 0.5rem;">
+                            <strong style="color: #ffd700;">Полусредна</strong>
+                            <div style="color: #ccc; font-size: 0.9rem;">Leon Edwards</div>
+                        </div>
+                        <div style="padding: 0.8rem; background: rgba(255,215,0,0.1); border-radius: 8px;">
+                            <strong style="color: #ffd700;">Лека категория</strong>
+                            <div style="color: #ccc; font-size: 0.9rem;">Islam Makhachev</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="sidebar-section">
+                    <h4>🔗 Полезни Връзки</h4>
+                    <ul class="recent-topics">
+                        <li><a th:href="@{/forum}">Дискусии за боевете</a></li>
+                        <li><a th:href="@{/analysis}">Анализи на боевете</a></li>
+                        <li><a th:href="@{/news}">Новини за UFC</a></li>
+                        <li><a th:href="@{/members}">Общност</a></li>
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>За нас</h5>
+                    <p>UFC България е независим форум, създаден от фенове за фенове на UFC и MMA спорта в България.</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Полезни връзки</h5>
+                    <a href="#" title="Правила на форума">Правила на форума</a>
+                    <a href="#" title="Често задавани въпроси">Често задавани въпроси</a>
+                    <a href="#" title="Контакти">Контакти</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Последвайте ни</h5>
+                    <a href="#" title="Facebook страница" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="#" title="Instagram профил" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="#" title="YouTube канал" target="_blank" rel="noopener noreferrer">YouTube</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 UFC България Форум. Всички права запазени. Този сайт не е свързан официално с UFC.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+

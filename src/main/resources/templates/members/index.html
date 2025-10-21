@@ -1,0 +1,224 @@
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container">
+        <div class="page-header">
+            <h2>👥 Членове на Общността</h2>
+            <p>Запознайте се с активните членове на UFC България форум</p>
+        </div>
+
+        <div class="content-grid">
+            <section class="main-content">
+                <!-- Statistics -->
+                <div class="stats-row" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
+                    <div class="stat-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 1.5rem; border-radius: 10px; text-align: center; color: white;">
+                        <div style="font-size: 2.5rem; font-weight: bold;" th:text="${totalUsers} ?: '1,247'">1,247</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">Общо Членове</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 1.5rem; border-radius: 10px; text-align: center; color: white;">
+                        <div style="font-size: 2.5rem; font-weight: bold;">342</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">Онлайн Сега</div>
+                    </div>
+                    <div class="stat-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); padding: 1.5rem; border-radius: 10px; text-align: center; color: white;">
+                        <div style="font-size: 2.5rem; font-weight: bold;">52</div>
+                        <div style="font-size: 0.9rem; opacity: 0.9;">Нови Днес</div>
+                    </div>
+                </div>
+
+                <!-- Members List -->
+                <div class="section-header">
+                    <h3>📋 Списък с Членове</h3>
+                </div>
+
+                <div class="members-grid" style="display: grid; gap: 1rem;">
+                    <!-- Member Item -->
+                    <div th:each="user : ${users}" class="member-card" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; display: flex; align-items: center; gap: 1.5rem;">
+                        <div class="member-avatar" style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2rem; font-weight: bold;">
+                            <span th:text="${#strings.substring(user.username, 0, 1).toUpperCase()}">U</span>
+                        </div>
+                        <div class="member-info" style="flex: 1;">
+                            <h4 style="margin: 0 0 0.5rem 0;">
+                                <a th:href="@{/user/profile/{username}(username=${user.username})}" style="color: #6495ed; text-decoration: none;" th:text="${user.username}">Username</a>
+                                <span th:if="${user.role.name() == 'ADMIN'}" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.75rem; margin-left: 0.5rem; font-weight: bold;">ADMIN</span>
+                            </h4>
+                            <p style="margin: 0 0 0.5rem 0; color: #888; font-size: 0.9rem;" th:text="${user.bio != null && !#strings.isEmpty(user.bio) ? user.bio : 'Фен на UFC и MMA спорта'}">Фен на UFC и MMA спорта</p>
+                            <div style="display: flex; gap: 1rem; color: #888; font-size: 0.85rem;">
+                                <span>📅 Член от: <span th:text="${#temporals.format(user.createdAt, 'dd.MM.yyyy')}">21.10.2024</span></span>
+                                <span>💬 Коментари: <span th:text="${user.posts != null ? user.posts.size() : 0}">0</span></span>
+                            </div>
+                        </div>
+                        <div class="member-actions">
+                            <a th:href="@{/user/profile/{username}(username=${user.username})}" class="btn btn-secondary">Профил</a>
+                        </div>
+                    </div>
+
+                    <!-- Fallback if no users -->
+                    <div th:if="${users == null || users.isEmpty()}" class="info-box" style="padding: 2rem; background: rgba(100, 149, 237, 0.1); border-left: 4px solid #6495ed; border-radius: 8px; text-align: center;">
+                        <h4 style="color: #6495ed; margin-top: 0;">Зареждане на членове...</h4>
+                        <p style="margin-bottom: 0;">Членовете на общността се зареждат. Моля, изчакайте.</p>
+                    </div>
+                </div>
+
+                <!-- Pagination -->
+                <div th:if="${totalPages > 1}" class="pagination" style="margin-top: 2rem; display: flex; justify-content: center; gap: 0.5rem;">
+                    <a th:if="${currentPage > 0}"
+                       th:href="@{/members(page=${currentPage - 1})}"
+                       class="btn btn-secondary">◀ Предишна</a>
+
+                    <span style="padding: 0.5rem 1rem; background: rgba(255,255,255,0.05); border-radius: 5px;">
+                        Страница <span th:text="${currentPage + 1}">1</span> от <span th:text="${totalPages}">1</span>
+                    </span>
+
+                    <a th:if="${currentPage < totalPages - 1}"
+                       th:href="@{/members(page=${currentPage + 1})}"
+                       class="btn btn-secondary">Следваща ▶</a>
+                </div>
+
+                <div class="info-box" style="margin-top: 2rem; padding: 1.5rem; background: rgba(100, 149, 237, 0.1); border-left: 4px solid #6495ed; border-radius: 8px;">
+                    <h4 style="margin-top: 0; color: #6495ed;">🌟 Присъединете се към Общността</h4>
+                    <p>Станете част от най-голямата българска общност на UFC фенове!</p>
+                    <ul style="margin-bottom: 1rem;">
+                        <li>Споделяйте вашето мнение за боевете</li>
+                        <li>Създавайте собствени анализи и прогнози</li>
+                        <li>Общувайте с други фенове на спорта</li>
+                        <li>Участвайте в дискусии и състезания</li>
+                    </ul>
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/user/register}" class="btn btn-primary">Регистрирай се сега</a>
+                    </div>
+                </div>
+            </section>
+
+            <aside class="sidebar">
+                <section class="sidebar-section">
+                    <h4>🏆 Топ Активни Членове</h4>
+                    <div class="top-members-list">
+                        <div style="padding: 0.8rem; background: rgba(255,215,0,0.1); border-left: 3px solid #ffd700; border-radius: 5px; margin-bottom: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;">
+                                <span style="color: #ffd700; font-size: 1.2rem;">🥇</span>
+                                <strong style="color: #ffd700;">@ufcfan_bg</strong>
+                            </div>
+                            <div style="color: #888; font-size: 0.85rem;">2,347 постове</div>
+                        </div>
+                        <div style="padding: 0.8rem; background: rgba(192,192,192,0.1); border-left: 3px solid #c0c0c0; border-radius: 5px; margin-bottom: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;">
+                                <span style="color: #c0c0c0; font-size: 1.2rem;">🥈</span>
+                                <strong style="color: #c0c0c0;">@mma_expert</strong>
+                            </div>
+                            <div style="color: #888; font-size: 0.85rem;">1,892 постове</div>
+                        </div>
+                        <div style="padding: 0.8rem; background: rgba(205,127,50,0.1); border-left: 3px solid #cd7f32; border-radius: 5px; margin-bottom: 0.5rem;">
+                            <div style="display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.3rem;">
+                                <span style="color: #cd7f32; font-size: 1.2rem;">🥉</span>
+                                <strong style="color: #cd7f32;">@fight_analyst</strong>
+                            </div>
+                            <div style="color: #888; font-size: 0.85rem;">1,567 постове</div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="sidebar-section">
+                    <h4>🆕 Нови Членове</h4>
+                    <ul class="recent-topics">
+                        <li><a th:href="@{/members}">@new_fighter_2024</a></li>
+                        <li><a th:href="@{/members}">@ufc_bulgaria</a></li>
+                        <li><a th:href="@{/members}">@mma_lover</a></li>
+                        <li><a th:href="@{/members}">@octagon_fan</a></li>
+                    </ul>
+                </section>
+
+                <section class="sidebar-section">
+                    <h4>🔗 Полезни Връзки</h4>
+                    <ul class="recent-topics">
+                        <li><a th:href="@{/forum}">Форум</a></li>
+                        <li><a th:href="@{/news}">Новини</a></li>
+                        <li><a th:href="@{/fights}">Боеве</a></li>
+                        <li><a th:href="@{/analysis}">Анализи</a></li>
+                    </ul>
+                </section>
+            </aside>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h5>За нас</h5>
+                    <p>UFC България е независим форум, създаден от фенове за фенове на UFC и MMA спорта в България.</p>
+                </div>
+                <div class="footer-section">
+                    <h5>Полезни връзки</h5>
+                    <a href="#" title="Правила на форума">Правила на форума</a>
+                    <a href="#" title="Често задавани въпроси">Често задавани въпроси</a>
+                    <a href="#" title="Контакти">Контакти</a>
+                </div>
+                <div class="footer-section">
+                    <h5>Последвайте ни</h5>
+                    <a href="#" title="Facebook страница" target="_blank" rel="noopener noreferrer">Facebook</a>
+                    <a href="#" title="Instagram профил" target="_blank" rel="noopener noreferrer">Instagram</a>
+                    <a href="#" title="YouTube канал" target="_blank" rel="noopener noreferrer">YouTube</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 UFC България Форум. Всички права запазени. Този сайт не е свързан официално с UFC.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
+<!DOCTYPE html>
+<html lang="bg" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Членове - UFC България</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <a th:href="@{/}" class="logo">
+                    <div class="logo-icon">UFC</div>
+                    <h1>UFC България</h1>
+                </a>
+                <div class="auth-buttons">
+                    <div sec:authorize="!isAuthenticated()">
+                        <a th:href="@{/login}" class="btn btn-secondary">Вход</a>
+                        <a th:href="@{/user/register}" class="btn btn-primary">Регистрация</a>
+                    </div>
+                    <div sec:authorize="isAuthenticated()" class="user-info">
+                        <a sec:authorize="hasRole('ADMIN')" th:href="@{/admin/dashboard}" class="btn btn-warning">⚙️ Админ Панел</a>
+                        <span class="user-welcome">Здравей, <strong sec:authentication="name">User</strong>!</span>
+                        <form th:action="@{/logout}" method="post" style="display: inline;">
+                            <button type="submit" class="btn btn-danger">Изход</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <nav>
+        <div class="container">
+            <div class="nav-content">
+                <ul class="nav-links">
+                    <li><a th:href="@{/}">Начало</a></li>
+                    <li><a th:href="@{/forum}">Форум</a></li>
+                    <li><a th:href="@{/news}">Новини</a></li>
+                    <li><a th:href="@{/fights}">Боеве</a></li>
+                    <li><a th:href="@{/analysis}">Анализи</a></li>
+                    <li><a th:href="@{/members}" class="active">Членове</a></li>
+                    <li sec:authorize="hasRole('ADMIN')">
+                        <a th:href="@{/admin/dashboard}" style="background: linear-gradient(45deg, #d4af37, #ffd700); color: #000; padding: 10px 15px; border-radius: 20px; font-weight: bold;">⚙️ Админ</a>
+                    </li>
+                </ul>
+                <div class="search-form-nav">
+                    <form th:action="@{/search}" method="get" class="search-form-inline">
+                        <input type="text" name="query" placeholder="🔍 Търсене..." class="search-input-inline" required minlength="2">
+                        <button type="submit" class="btn-search-inline">Търси</button>
+                    </form>
+

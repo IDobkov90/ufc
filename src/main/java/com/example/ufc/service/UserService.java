@@ -3,11 +3,15 @@ package com.example.ufc.service;
 import com.example.ufc.dto.UserRegistrationDto;
 import com.example.ufc.dto.UserUpdateDto;
 import com.example.ufc.entity.User;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+
 import java.util.List;
 import java.util.Optional;
 
 public interface UserService {
     List<User> findAll();
+    Page<User> findAllUsers(Pageable pageable);
     Optional<User> findById(Long id);
     Optional<User> findByUsername(String username);
     Optional<User> findByEmail(String email);
