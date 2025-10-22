@@ -100,6 +100,8 @@ public class SecurityConfig {
                         .requestMatchers("/", "/home", "/login", "/user/register").permitAll()
                         .requestMatchers("/h2-console/**").permitAll()
                         .requestMatchers("/error").permitAll()
+                        // Info pages - public access
+                        .requestMatchers("/info/**").permitAll()
                         // Search functionality
                         .requestMatchers("/search").permitAll()
                         // Forum - public viewing, authenticated for creation
