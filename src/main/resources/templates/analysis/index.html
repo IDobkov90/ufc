@@ -69,7 +69,7 @@
                     <h3 style="margin: 0 0 1rem 0; font-size: 1.8rem;">UFC 296: Детайлен Преглед на Главния Бой</h3>
                     <p style="margin: 0 0 1rem 0; opacity: 0.9;">Задълбочен анализ на техническите умения, силни страни и слабости на двамата бойци...</p>
                     <div style="display: flex; gap: 1rem; margin-top: 1.5rem;">
-                        <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="btn btn-primary">Прочети повече</a>
+                        <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="btn btn-primary">Прочети повече</a>
                         <span style="opacity: 0.8;">📅 20 Октомври 2025 • 👤 Автор: UFC България</span>
                     </div>
                 </div>
@@ -80,129 +80,167 @@
                 </div>
 
                 <div class="analysis-categories" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1rem; margin-bottom: 2rem;">
-                    <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="category-card" style="background: rgba(100, 149, 237, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #6495ed; text-decoration: none; transition: all 0.3s;">
+                    <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="category-card" style="background: rgba(100, 149, 237, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #6495ed; text-decoration: none; transition: all 0.3s;">
                         <div style="font-size: 2rem; margin-bottom: 0.5rem;">🎯</div>
                         <h4 style="margin: 0 0 0.5rem 0; color: #6495ed;">Прогнози</h4>
                         <p style="margin: 0; color: #ccc; font-size: 0.9rem;">Предвиждания за предстоящи боеве</p>
                     </a>
 
-                    <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="category-card" style="background: rgba(255, 99, 71, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #ff6347; text-decoration: none; transition: all 0.3s;">
+                    <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="category-card" style="background: rgba(255, 99, 71, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #ff6347; text-decoration: none; transition: all 0.3s;">
                         <div style="font-size: 2rem; margin-bottom: 0.5rem;">📈</div>
                         <h4 style="margin: 0 0 0.5rem 0; color: #ff6347;">Статистики</h4>
                         <p style="margin: 0; color: #ccc; font-size: 0.9rem;">Данни и числа за бойците</p>
                     </a>
 
-                    <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="category-card" style="background: rgba(50, 205, 50, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #32cd32; text-decoration: none; transition: all 0.3s;">
+                    <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="category-card" style="background: rgba(50, 205, 50, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #32cd32; text-decoration: none; transition: all 0.3s;">
                         <div style="font-size: 2rem; margin-bottom: 0.5rem;">🔍</div>
                         <h4 style="margin: 0 0 0.5rem 0; color: #32cd32;">Разбор на Боеве</h4>
                         <p style="margin: 0; color: #ccc; font-size: 0.9rem;">Детайлен анализ след събития</p>
                     </a>
 
-                    <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="category-card" style="background: rgba(255, 215, 0, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #ffd700; text-decoration: none; transition: all 0.3s;">
-                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🥊</div>
-                        <h4 style="margin: 0 0 0.5rem 0; color: #ffd700;">Тактически Анализ</h4>
-                        <p style="margin: 0; color: #ccc; font-size: 0.9rem;">Стратегии и техники</p>
+                    <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="category-card" style="background: rgba(255, 215, 0, 0.1); padding: 1.5rem; border-radius: 10px; border-left: 4px solid #ffd700; text-decoration: none; transition: all 0.3s;">
+                        <div style="font-size: 2rem; margin-bottom: 0.5rem;">🏅</div>
+                        <h4 style="margin: 0 0 0.5rem 0; color: #ffd700;">Стратегии</h4>
+                        <p style="margin: 0; color: #ccc; font-size: 0.9rem;">Бойни стратегии и тактики</p>
                     </a>
                 </div>
 
                 <!-- Recent Analysis -->
                 <div class="section-header">
-                    <h3>📝 Последни Анализи</h3>
+                    <h3>🆕 Последни Анализи</h3>
                 </div>
 
-                <div class="analysis-list">
-                    <article class="analysis-item" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; border-left: 4px solid #6495ed;">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                            <div>
-                                <span style="background: #6495ed; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; display: inline-block; margin-bottom: 0.5rem;">ПРОГНОЗА</span>
-                                <h4 style="margin: 0; color: #6495ed;">Edwards vs Covington: Кой ще спечели титлата?</h4>
-                            </div>
+                <div class="analysis-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                    <!-- Sample Analysis Items -->
+                    <div class="analysis-item" style="background: #2a2a2a; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #6495ed;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <h4 style="margin: 0; color: #6495ed;">Анализ: Предстоящ UFC Ивент</h4>
+                            <span style="background: rgba(100, 149, 237, 0.2); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; color: #6495ed;">📊 Анализ</span>
                         </div>
-                        <p style="color: #ccc; margin-bottom: 1rem;">Задълбочен анализ на силните и слабите страни на двамата бойци, техните предишни изяви и възможните сценарии за развитие на боя...</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                            <div style="color: #888; font-size: 0.9rem;">
-                                <span>📅 20 Октомври 2025</span> • <span>👤 Автор: UFC България</span> • <span>💬 15 коментара</span>
-                            </div>
-                            <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="btn btn-secondary">Прочети</a>
+                        <p style="margin: 0.5rem 0; color: #ccc;">Детайлен преглед на силните и слаби страни на всеки боец, статистически данни и очаквани резултати.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.85rem; color: #999;">
+                            <span>👤 UFC България</span>
+                            <span>📅 22 Октомври 2025</span>
                         </div>
-                    </article>
+                        <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="btn btn-secondary" style="margin-top: 1rem; display: inline-block;">Прочети повече →</a>
+                    </div>
 
-                    <article class="analysis-item" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; border-left: 4px solid #32cd32;">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                            <div>
-                                <span style="background: #32cd32; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; display: inline-block; margin-bottom: 0.5rem;">РАЗБОР</span>
-                                <h4 style="margin: 0; color: #32cd32;">UFC 295: Какво научихме от Pereira срещу Prochazka</h4>
-                            </div>
+                    <div class="analysis-item" style="background: #2a2a2a; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #ff6347;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <h4 style="margin: 0; color: #ff6347;">Статистически Преглед: Топ 10 Бойци</h4>
+                            <span style="background: rgba(255, 99, 71, 0.2); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; color: #ff6347;">📈 Статистика</span>
                         </div>
-                        <p style="color: #ccc; margin-bottom: 1rem;">Детайлен разбор на техниката, използвана от Alex Pereira за постигане на впечатляващата победа с TKO...</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                            <div style="color: #888; font-size: 0.9rem;">
-                                <span>📅 19 Октомври 2025</span> • <span>👤 Автор: UFC България</span> • <span>💬 23 коментара</span>
-                            </div>
-                            <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="btn btn-secondary">Прочети</a>
+                        <p style="margin: 0.5rem 0; color: #ccc;">Подробни статистики за топ 10 бойци в различните тегловни категории, включително процент на победи, финиши и др.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.85rem; color: #999;">
+                            <span>👤 Анализатор</span>
+                            <span>📅 20 Октомври 2025</span>
                         </div>
-                    </article>
+                        <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="btn btn-secondary" style="margin-top: 1rem; display: inline-block;">Прочети повече →</a>
+                    </div>
 
-                    <article class="analysis-item" style="background: rgba(255,255,255,0.05); padding: 1.5rem; border-radius: 10px; margin-bottom: 1rem; border-left: 4px solid #ff6347;">
-                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 1rem;">
-                            <div>
-                                <span style="background: #ff6347; color: white; padding: 0.3rem 0.8rem; border-radius: 20px; font-size: 0.8rem; display: inline-block; margin-bottom: 0.5rem;">СТАТИСТИКИ</span>
-                                <h4 style="margin: 0; color: #ff6347;">Топ 10 най-точни ударници в UFC през 2024</h4>
-                            </div>
+                    <div class="analysis-item" style="background: #2a2a2a; padding: 1.5rem; border-radius: 10px; border-left: 4px solid #32cd32;">
+                        <div style="display: flex; justify-content: space-between; align-items: start; margin-bottom: 0.5rem;">
+                            <h4 style="margin: 0; color: #32cd32;">Разбор на Последния UFC Ивент</h4>
+                            <span style="background: rgba(50, 205, 50, 0.2); padding: 0.2rem 0.6rem; border-radius: 12px; font-size: 0.8rem; color: #32cd32;">🔍 Разбор</span>
                         </div>
-                        <p style="color: #ccc; margin-bottom: 1rem;">Статистически преглед на най-точните ударници в UFC, базиран на данни от всички боеве през годината...</p>
-                        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
-                            <div style="color: #888; font-size: 0.9rem;">
-                                <span>📅 18 Октомври 2025</span> • <span>👤 Автор: UFC България</span> • <span>💬 8 коментара</span>
-                            </div>
-                            <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="btn btn-secondary">Прочети</a>
+                        <p style="margin: 0.5rem 0; color: #ccc;">Детайлен анализ на всички боеве от последния UFC ивент, ключови моменти и изненади.</p>
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem; font-size: 0.85rem; color: #999;">
+                            <span>👤 Експерт</span>
+                            <span>📅 18 Октомври 2025</span>
                         </div>
-                    </article>
+                        <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="btn btn-secondary" style="margin-top: 1rem; display: inline-block;">Прочети повече →</a>
+                    </div>
                 </div>
 
-                <div class="info-box" style="margin-top: 2rem; padding: 1.5rem; background: rgba(100, 149, 237, 0.1); border-left: 4px solid #6495ed; border-radius: 8px;">
-                    <h4 style="margin-top: 0; color: #6495ed;">📊 Предстоящи Функционалности</h4>
-                    <p>Този раздел скоро ще бъде разширен с:</p>
-                    <ul style="margin-bottom: 0;">
-                        <li>Професионални анализи от експерти</li>
-                        <li>Интерактивни статистики и графики</li>
-                        <li>Възможност за споделяне на собствени анализи</li>
-                        <li>Сравнение на бойци</li>
-                        <li>Исторически данни и тенденции</li>
-                    </ul>
+                <!-- Call to Action -->
+                <div style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); padding: 2rem; border-radius: 15px; margin-top: 2rem; text-align: center; color: white;">
+                    <h3 style="margin: 0 0 1rem 0;">Искате да споделите своя анализ?</h3>
+                    <p style="margin: 0 0 1.5rem 0; opacity: 0.9;">Присъединете се към нашата общност и споделете вашите знания!</p>
+                    <div style="display: flex; gap: 1rem; justify-content: center;">
+                        <a th:href="@{/forum/topic/new}" class="btn btn-primary">Създай Анализ</a>
+                        <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="btn" style="background: rgba(255,255,255,0.2); color: white;">Всички Анализи</a>
+                    </div>
                 </div>
             </section>
 
             <aside class="sidebar">
-                <section class="sidebar-section">
-                    <h4>🔥 Популярни Анализи</h4>
-                    <ul class="recent-topics">
-                        <li><a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}">Прогноза за UFC 296</a></li>
-                        <li><a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}">Статистики на Pereira</a></li>
-                        <li><a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}">Топ нокаути 2024</a></li>
-                        <li><a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}">Техники на Jones</a></li>
-                    </ul>
-                </section>
-
-                <section class="sidebar-section">
-                    <h4>💡 Съвети</h4>
-                    <div style="padding: 1rem; background: rgba(255,215,0,0.1); border-radius: 8px;">
-                        <p style="margin: 0; font-size: 0.9rem; color: #ffd700;">
-                            <strong>Знаехте ли?</strong><br>
-                            Статистиките показват, че бойците с по-висока точност на удари имат 68% по-голям шанс за победа.
-                        </p>
+                <!-- Quick Stats -->
+                <div class="widget">
+                    <h3>📊 Бързи Статистики</h3>
+                    <div class="stats-grid" style="display: grid; gap: 1rem;">
+                        <div style="background: rgba(100, 149, 237, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: #6495ed;">150+</div>
+                            <div style="font-size: 0.9rem; color: #ccc;">Анализи</div>
+                        </div>
+                        <div style="background: rgba(50, 205, 50, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: #32cd32;">85%</div>
+                            <div style="font-size: 0.9rem; color: #ccc;">Точност</div>
+                        </div>
+                        <div style="background: rgba(255, 215, 0, 0.1); padding: 1rem; border-radius: 8px; text-align: center;">
+                            <div style="font-size: 2rem; font-weight: bold; color: #ffd700;">50+</div>
+                            <div style="font-size: 0.9rem; color: #ccc;">Експерти</div>
+                        </div>
                     </div>
-                </section>
+                </div>
 
-                <section class="sidebar-section">
-                    <h4>🔗 Полезни Връзки</h4>
-                    <ul class="recent-topics">
-                        <li><a th:href="@{/forum}">Форум</a></li>
-                        <li><a th:href="@{/fights}">Предстоящи боеве</a></li>
-                        <li><a th:href="@{/news}">Новини</a></li>
-                        <li><a th:href="@{/members}">Общност</a></li>
-                    </ul>
-                </section>
+                <!-- Top Analysts -->
+                <div class="widget">
+                    <h3>🏆 Топ Анализатори</h3>
+                    <div class="analyst-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                        <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: #2a2a2a; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">1</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold;">UFC България</div>
+                                <div style="font-size: 0.85rem; color: #999;">120 анализи</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: #2a2a2a; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">2</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold;">Анализатор</div>
+                                <div style="font-size: 0.85rem; color: #999;">85 анализи</div>
+                            </div>
+                        </div>
+                        <div style="display: flex; align-items: center; gap: 0.8rem; padding: 0.8rem; background: #2a2a2a; border-radius: 8px;">
+                            <div style="width: 40px; height: 40px; background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold;">3</div>
+                            <div style="flex: 1;">
+                                <div style="font-weight: bold;">Експерт</div>
+                                <div style="font-size: 0.85rem; color: #999;">72 анализи</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Upcoming Events -->
+                <div class="widget">
+                    <h3>📅 Предстоящи Събития</h3>
+                    <div class="events-list" style="display: flex; flex-direction: column; gap: 0.8rem;">
+                        <div style="padding: 0.8rem; background: #2a2a2a; border-radius: 8px; border-left: 3px solid #6495ed;">
+                            <div style="font-weight: bold; margin-bottom: 0.3rem;">UFC 296</div>
+                            <div style="font-size: 0.85rem; color: #999;">16 Декември 2025</div>
+                        </div>
+                        <div style="padding: 0.8rem; background: #2a2a2a; border-radius: 8px; border-left: 3px solid #ff6347;">
+                            <div style="font-weight: bold; margin-bottom: 0.3rem;">UFC Fight Night</div>
+                            <div style="font-size: 0.85rem; color: #999;">09 Декември 2025</div>
+                        </div>
+                        <div style="padding: 0.8rem; background: #2a2a2a; border-radius: 8px; border-left: 3px solid #32cd32;">
+                            <div style="font-weight: bold; margin-bottom: 0.3rem;">UFC 297</div>
+                            <div style="font-size: 0.85rem; color: #999;">20 Януари 2026</div>
+                        </div>
+                    </div>
+                    <a th:href="@{/forum/category/UPCOMING_EVENTS}" class="btn btn-secondary" style="margin-top: 1rem; width: 100%; text-align: center;">Всички Събития →</a>
+                </div>
+
+                <!-- Quick Links -->
+                <div class="widget">
+                    <h3>🔗 Бързи Връзки</h3>
+                    <div class="quick-links" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                        <a th:href="@{/forum/category/FIGHT_ANALYSIS}" style="color: #6495ed; text-decoration: none; padding: 0.5rem; background: rgba(100, 149, 237, 0.1); border-radius: 5px;">📊 Всички Анализи</a>
+                        <a th:href="@{/forum/category/UPCOMING_EVENTS}" style="color: #ff6347; text-decoration: none; padding: 0.5rem; background: rgba(255, 99, 71, 0.1); border-radius: 5px;">📅 Предстоящи Боеве</a>
+                        <a th:href="@{/forum/category/UFC_HISTORY}" style="color: #32cd32; text-decoration: none; padding: 0.5rem; background: rgba(50, 205, 50, 0.1); border-radius: 5px;">🏆 История на UFC</a>
+                        <a th:href="@{/forum/topic/new}" style="color: #ffd700; text-decoration: none; padding: 0.5rem; background: rgba(255, 215, 0, 0.1); border-radius: 5px;">✍️ Създай Анализ</a>
+                    </div>
+                </div>
             </aside>
         </div>
     </main>
@@ -211,27 +249,47 @@
         <div class="container">
             <div class="footer-content">
                 <div class="footer-section">
-                    <h5>За нас</h5>
-                    <p>UFC България е независим форум, създаден от фенове за фенове на UFC и MMA спорта в България.</p>
+                    <h3>За нас</h3>
+                    <p>UFC България - Вашата дестинация за UFC новини, анализи и обсъждания на български език.</p>
                 </div>
                 <div class="footer-section">
-                    <h5>Полезни връзки</h5>
-                    <a href="#" title="Правила на форума">Правила на форума</a>
-                    <a href="#" title="Често задавани въпроси">Често задавани въпроси</a>
-                    <a href="#" title="Контакти">Контакти</a>
+                    <h3>Връзки</h3>
+                    <ul>
+                        <li><a th:href="@{/}">Начало</a></li>
+                        <li><a th:href="@{/forum}">Форум</a></li>
+                        <li><a th:href="@{/news}">Новини</a></li>
+                        <li><a th:href="@{/analysis}">Анализи</a></li>
+                    </ul>
                 </div>
                 <div class="footer-section">
-                    <h5>Последвайте ни</h5>
-                    <a href="#" title="Facebook страница" target="_blank" rel="noopener noreferrer">Facebook</a>
-                    <a href="#" title="Instagram профил" target="_blank" rel="noopener noreferrer">Instagram</a>
-                    <a href="#" title="YouTube канал" target="_blank" rel="noopener noreferrer">YouTube</a>
+                    <h3>Следвайте ни</h3>
+                    <div class="social-links">
+                        <a href="#" title="Facebook">📘 Facebook</a>
+                        <a href="#" title="Twitter">🐦 Twitter</a>
+                        <a href="#" title="Instagram">📷 Instagram</a>
+                    </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 UFC България Форум. Всички права запазени. Този сайт не е свързан официално с UFC.</p>
+                <p>&copy; 2025 UFC България. Всички права запазени.</p>
             </div>
         </div>
     </footer>
+
+    <style>
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .analysis-item {
+            transition: all 0.3s;
+        }
+
+        .analysis-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 3px 10px rgba(0, 0, 0, 0.3);
+        }
+    </style>
 </body>
 </html>
-

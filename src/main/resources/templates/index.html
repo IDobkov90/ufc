@@ -102,7 +102,7 @@
                         <div class="category-title">📅 Предстоящи събития</div>
                         <div class="category-desc">Информация и дискусии за предстоящи UFC събития и боеве</div>
                     </a>
-                    <a th:href="@{/forum/category/ANALYSIS_PREDICTIONS}" class="category-item" tabindex="0" role="button" aria-label="Анализи и прогнози">
+                    <a th:href="@{/forum/category/FIGHT_ANALYSIS}" class="category-item" tabindex="0" role="button" aria-label="Анализи и прогнози">
                         <div class="category-title">📊 Анализи и прогнози</div>
                         <div class="category-desc">Споделете вашите анализи, прогнози и стратегии за залагане</div>
                     </a>
@@ -146,12 +146,32 @@
                 <section class="sidebar-section">
                     <h4>Последни теми</h4>
                     <ul class="recent-topics">
-                        <li><a href="#" title="Прочети повече">UFC 295: Обсъждане на резултатите</a></li>
-                        <li><a href="#" title="Прочети повече">Предстоящ боен дебют на Борислав Никифоров</a></li>
-                        <li><a href="#" title="Прочети повече">Анализ: Кой ще спечели следващия титул?</a></li>
-                        <li><a href="#" title="Прочети повече">История: Най-добрите боеве от 2024</a></li>
-                        <li><a href="#" title="Прочети повече">Тренировъчни съвети от професионалисти</a></li>
+                        <li th:if="${recentTopics == null or recentTopics.isEmpty()}" style="color: #999; font-style: italic;">
+                            Все още няма създадени теми. Бъдете първи!
+                        </li>
+                        <li th:each="topic : ${recentTopics}">
+                            <a th:href="@{/forum/topic/{id}(id=${topic.id})}"
+                               th:title="'Прочети повече за: ' + ${topic.title}"
+                               style="display: flex; align-items: center; gap: 0.5rem; text-decoration: none; color: #6495ed; padding: 0.5rem; border-radius: 5px; transition: all 0.2s;">
+                                <span th:if="${topic.isPinned}" style="color: #ffd700;" title="Прикачена тема">📌</span>
+                                <span th:text="${topic.category.icon}" style="font-size: 1.2rem;"></span>
+                                <span style="flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;">
+                                    <span th:text="${topic.title}" style="font-weight: 500;"></span>
+                                    <span style="display: block; font-size: 0.75rem; color: #999; margin-top: 0.2rem;">
+                                        <span th:text="${topic.authorUsername}"></span> •
+                                        <span th:text="${#temporals.format(topic.createdAt, 'dd.MM.yyyy HH:mm')}"></span>
+                                    </span>
+                                </span>
+                                <span style="display: flex; gap: 0.5rem; font-size: 0.8rem; color: #999;">
+                                    <span th:title="'Отговори: ' + ${topic.replyCount}">💬 <span th:text="${topic.replyCount}"></span></span>
+                                    <span th:title="'Прегледи: ' + ${topic.viewCount}">👁 <span th:text="${topic.viewCount}"></span></span>
+                                </span>
+                            </a>
+                        </li>
                     </ul>
+                    <div style="margin-top: 1rem; text-align: center;">
+                        <a th:href="@{/forum}" class="btn btn-secondary" style="width: 100%; padding: 0.5rem;">Всички теми →</a>
+                    </div>
                 </section>
 
                 <section class="sidebar-section">
