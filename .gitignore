@@ -62,9 +62,18 @@ bin/
 .DS_Store
 Thumbs.db
 
-# Application specific
+# Application specific - Environment Variables
+.env
+.env.local
+.env.*.local
 application-local.properties
-application-dev.properties
+
+# Test Scripts (Local Only - contain credentials)
+test-phase1.cmd
+start-app.cmd
+check-mysql.cmd
+find-mysql-password.cmd
+TESTING_CHECKLIST.md
 
 # H2 Database
 *.db
@@ -73,4 +82,12 @@ application-dev.properties
 # Logs
 logs/
 *.log
+
+# Sensitive Configuration (NEVER commit these!)
+*-prod.properties.local
+secrets/
+*.key
+*.pem
+*.p12
+*.jks
 

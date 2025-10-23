@@ -28,25 +28,56 @@
 
 ## ⚙️ Инсталация
 
-1. Клонирайте репозиторито:
+### 1. Клонирайте репозиторито:
 ```bash
 git clone https://github.com/IDobkov90/ufc.git
 cd ufc
 ```
 
-2. Конфигурирайте базата данни в `src/main/resources/application.properties`:
-```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/ufcdb
-spring.datasource.username=your_username
-spring.datasource.password=your_password
+### 2. Конфигурирайте environment variables:
+
+**Windows (CMD):**
+```cmd
+set DB_USERNAME=root
+set DB_PASSWORD=your_password
+set JWT_SECRET=your_very_long_and_random_secret_key_at_least_256_bits
+set SPRING_PROFILES_ACTIVE=dev
 ```
 
-3. Стартирайте приложението:
+**Windows (PowerShell):**
+```powershell
+$env:DB_USERNAME="root"
+$env:DB_PASSWORD="your_password"
+$env:JWT_SECRET="your_very_long_and_random_secret_key_at_least_256_bits"
+$env:SPRING_PROFILES_ACTIVE="dev"
+```
+
+**Linux/Mac:**
+```bash
+export DB_USERNAME="root"
+export DB_PASSWORD="your_password"
+export JWT_SECRET="your_very_long_and_random_secret_key_at_least_256_bits"
+export SPRING_PROFILES_ACTIVE="dev"
+```
+
+📖 **Detailed configuration guide:** See [ENVIRONMENT_VARIABLES_GUIDE.md](ENVIRONMENT_VARIABLES_GUIDE.md)
+
+### 3. Създайте MySQL база данни:
+```sql
+CREATE DATABASE ufcdb_dev CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+```
+
+### 4. Стартирайте приложението:
 ```bash
 ./mvnw spring-boot:run
 ```
 
-4. Отворете браузър на адрес: `http://localhost:8080`
+### 5. Отворете браузър на адрес: 
+`http://localhost:8080`
+
+### 🔐 Security Note:
+Never commit sensitive information like passwords or JWT secrets to version control!
+All secrets should be set as environment variables.
 
 ## 🗂️ Структура на проекта
 
