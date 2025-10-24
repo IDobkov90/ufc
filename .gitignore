@@ -76,17 +76,34 @@ find-mysql-password.cmd
 TESTING_CHECKLIST.md
 
 # Internal Development Documentation (Keep Local Only)
-ADMIN_PANEL_TESTING_GUIDE.md
-ADMIN_PANEL_IMPROVEMENTS.md
-CODE_REVIEW_AND_ROADMAP.md
-COMMENTING_SYSTEM_IMPLEMENTATION.md
-FIXES_APPLIED_SUMMARY.md
+# Exclude all internal development docs - only public-facing docs should be committed
+*_GUIDE.md
+*_TESTING*.md
+*_IMPLEMENTATION*.md
+*_IMPROVEMENTS*.md
+*_SUMMARY*.md
+*_ROADMAP*.md
+*_AUDIT*.md
+*_CHECKLIST*.md
+*_PLAN*.md
+*_NOTES*.md
+*_TODO*.md
+*_REVIEW*.md
 HELP.md
-IMPROVEMENTS.md
-PHASE1_COMPLETION_SUMMARY.md
-PRODUCTION_READINESS_ROADMAP.md
-SECURITY_AUDIT.md
-USER_PROFILE_IMPLEMENTATION.md
+CHANGELOG.md
+DEVELOPMENT.md
+INTERNAL*.md
+PRIVATE*.md
+DRAFT*.md
+WIP*.md
+PHASE*.md
+
+# Whitelist public-facing documentation (exceptions to above rules)
+!README.md
+!QUICK_START.md
+!CONTRIBUTING.md
+!LICENSE.md
+!CODE_OF_CONDUCT.md
 
 # H2 Database
 *.db
