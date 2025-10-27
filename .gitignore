@@ -73,7 +73,12 @@ test-phase1.cmd
 start-app.cmd
 check-mysql.cmd
 find-mysql-password.cmd
+test-mysql-connection.bat
 TESTING_CHECKLIST.md
+
+# Database Setup and Configuration Helpers (Local Only)
+DATABASE_SETUP.md
+FIX_MYSQL_PASSWORD.md
 
 # Internal Development Documentation (Keep Local Only)
 # Exclude all internal development docs - only public-facing docs should be committed
